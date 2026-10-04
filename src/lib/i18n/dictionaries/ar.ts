@@ -116,6 +116,14 @@ export const ar: Dict = {
       signed: "تم توقيع العقد",
       hostMessage: "مرحباً بك في {city}! نلتقي على الساعة 10 لتسليم المفاتيح. — {name}",
     },
+    board: {
+      title: "الوصول",
+      code: "الرمز",
+      city: "المدينة",
+      info: "السيارات",
+      cars: "{count} سيارة",
+      from: "ابتداءً من",
+    },
     howTitle: "كيف تعمل المنصة",
     steps: {
       oneTitle: "اختر السيارة المناسبة",

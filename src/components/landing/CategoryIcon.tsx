@@ -41,12 +41,15 @@ const SHAPES: Record<CarCategory, Shape> = {
   },
 };
 
-export function CategoryIcon({ category }: { category: CarCategory }) {
+/** Each category's signature colour (used to tint its card). */
+export const CATEGORY_TINT = Object.fromEntries(Object.entries(SHAPES).map(([k, v]) => [k, v.colors[0]])) as Record<CarCategory, string>;
+
+export function CategoryIcon({ category, className }: { category: CarCategory; className?: string }) {
   const id = useId().replace(/:/g, "");
   const s = SHAPES[category];
   const ground = s.cy + s.r;
   return (
-    <svg viewBox="0 0 120 66" className="cat-icon h-14 w-auto overflow-visible rtl:-scale-x-100" aria-hidden>
+    <svg viewBox="0 0 120 66" className={`cat-icon w-auto overflow-visible rtl:-scale-x-100 ${className ?? "h-14"}`} aria-hidden>
       <defs>
         <linearGradient id={`b${id}`} x1="0" y1="0" x2="0" y2="1">
           <stop offset="0" stopColor={s.colors[0]} />

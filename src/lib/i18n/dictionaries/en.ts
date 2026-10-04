@@ -114,6 +114,14 @@ export const en = {
       signed: "Contract signed",
       hostMessage: "Welcome to {city}! I’ll meet you at 10:00 with the keys. — {name}",
     },
+    board: {
+      title: "ARRIVALS",
+      code: "Code",
+      city: "City",
+      info: "Cars",
+      cars: "{count} cars",
+      from: "from",
+    },
     howTitle: "How it works",
     steps: {
       oneTitle: "Find the right car",

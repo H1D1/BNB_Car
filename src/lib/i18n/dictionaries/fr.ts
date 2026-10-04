@@ -116,6 +116,14 @@ export const fr: Dict = {
       signed: "Contrat signé",
       hostMessage: "Bienvenue à {city} ! Je vous retrouve à 10h avec les clés. — {name}",
     },
+    board: {
+      title: "ARRIVÉES",
+      code: "Code",
+      city: "Ville",
+      info: "Voitures",
+      cars: "{count} voitures",
+      from: "dès",
+    },
     howTitle: "Comment ça marche",
     steps: {
       oneTitle: "Trouvez la bonne voiture",

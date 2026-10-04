@@ -223,3 +223,18 @@ export function badgesOf(p: Pick<Profile, "is_host" | "id_status" | "license_sta
     phoneVerified: p.phone_verified,
   };
 }
+
+/** Live numbers for the landing page: cars and lowest daily price per category and per airport. */
+export const getMarketStats = cache(async () => {
+  const supabase = await createClient();
+  const { data } = await supabase.from("cars").select("category, daily_price_mad, airport_slugs").eq("status", "active");
+  const byCategory: Partial<Record<CarCategory, { count: number; from: number }>> = {};
+  const byAirport: Record<string, { count: number; from: number }> = {};
+  const bump = (bucket: { count: number; from: number } | undefined, price: number) =>
+    bucket ? { count: bucket.count + 1, from: Math.min(bucket.from, price) } : { count: 1, from: price };
+  for (const c of data ?? []) {
+    byCategory[c.category as CarCategory] = bump(byCategory[c.category as CarCategory], c.daily_price_mad);
+    for (const a of (c.airport_slugs as string[]) ?? []) byAirport[a] = bump(byAirport[a], c.daily_price_mad);
+  }
+  return { byCategory, byAirport };
+});
