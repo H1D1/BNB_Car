@@ -1,13 +1,8 @@
-// Mapbox: raster tiles for Leaflet + Geocoding v6 for suggestions / reverse lookup.
+// Mapbox: Geocoding v6 for suggestions / reverse lookup (maps use Mapbox GL, see CarMap).
 // The public (pk.) token is safe to ship to the browser; restrict it to your domains in the Mapbox dashboard.
 import type { Locale, Place } from "./types";
 
 export const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_TOKEN ?? "";
-
-// Airbnb-like basemap: soft streets style in both themes (dark UI just tones it down via CSS).
-export const MAPBOX_TILES = `https://api.mapbox.com/styles/v1/mapbox/streets-v12/tiles/512/{z}/{x}/{y}@2x?access_token=${MAPBOX_TOKEN}`;
-export const MAPBOX_ATTRIBUTION =
-  '&copy; <a href="https://www.mapbox.com/about/maps/">Mapbox</a> &copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>';
 
 export type GeoResult = {
   id: string;

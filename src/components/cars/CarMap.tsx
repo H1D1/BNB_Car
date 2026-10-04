@@ -1,48 +1,23 @@
 "use client";
 
-import "leaflet/dist/leaflet.css";
-import { useEffect, useMemo } from "react";
-import L from "leaflet";
-import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-leaflet";
+import "mapbox-gl/dist/mapbox-gl.css";
+import { useEffect, useRef } from "react";
 import { useRouter } from "next/navigation";
+import mapboxgl from "mapbox-gl";
 import { formatMAD } from "@/lib/currency";
 import { useI18n } from "@/lib/i18n/client";
-import { MAPBOX_ATTRIBUTION, MAPBOX_TILES } from "@/lib/mapbox";
+import { MAPBOX_TOKEN } from "@/lib/mapbox";
+import { prepareStoryStyle } from "@/lib/map-style";
 
 type Pin = { id: string; lat: number; lng: number; price?: number; label?: string };
 
-const MOROCCO_CENTER: [number, number] = [31.8, -7.1];
+const MOROCCO_CENTER: [number, number] = [-7.1, 31.8];
 
-// Airbnb-style price pills: white with dark text; hovered/active flips to dark.
-function priceIcon(text: string, active: boolean) {
-  return L.divIcon({
-    className: "price-pin",
-    html: `<div style="transform:translate(-50%,-50%) scale(${active ? 1.08 : 1});display:inline-block;white-space:nowrap;padding:6px 11px;border-radius:999px;font:700 13px/1 var(--font-sans);letter-spacing:.01em;color:${active ? "#fff" : "#151a3d"};background:${active ? "#151a3d" : "#fff"};box-shadow:0 0 0 1px rgba(0,0,0,.06),0 2px 6px rgba(0,0,0,.18),0 6px 16px rgba(0,0,0,.12);transition:transform .2s cubic-bezier(.22,1,.36,1),background .2s,color .2s">${text}</div>`,
-    iconSize: [0, 0],
-  });
-}
-
-const dotIcon = L.divIcon({
-  className: "price-pin",
-  html: `<div style="transform:translate(-50%,-50%);width:44px;height:44px;border-radius:999px;background:rgba(96,80,220,.18);display:grid;place-items:center"><div style="width:18px;height:18px;border-radius:999px;background:#6050dc;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)"></div></div>`,
-  iconSize: [0, 0],
-});
-
-function FitBounds({ pins }: { pins: Pin[] }) {
-  const map = useMap();
-  useEffect(() => {
-    if (pins.length === 0) map.setView(MOROCCO_CENTER, 5);
-    else if (pins.length === 1) map.setView([pins[0].lat, pins[0].lng], 13);
-    else map.fitBounds(L.latLngBounds(pins.map((p) => [p.lat, p.lng])), { padding: [40, 40], maxZoom: 13 });
-  }, [map, pins]);
-  return null;
-}
-
-function ClickToPick({ onPick }: { onPick: (lat: number, lng: number) => void }) {
-  useMapEvents({ click: (e) => onPick(e.latlng.lat, e.latlng.lng) });
-  return null;
-}
-
+/**
+ * App map (search results, car location, listing picker) on Mapbox GL with Morocco's worldview,
+ * so the southern provinces are drawn as part of Morocco — raster tiles can't do that.
+ * Airbnb-style price pills (white; dark when the car is hovered in the list).
+ */
 export default function CarMap({
   pins,
   activeId,
@@ -56,43 +31,124 @@ export default function CarMap({
   activeId?: string | null;
   onHover?: (id: string | null) => void;
   linkQuery?: string;
-  /** Picker mode: single draggable-by-click marker (listing wizard). */
+  /** Picker mode: click the map to move the single pin (listing wizard). */
   picker?: boolean;
   onPick?: (lat: number, lng: number) => void;
   zoom?: number;
 }) {
   const router = useRouter();
   const { locale } = useI18n();
-  const stable = useMemo(() => pins, [pins]);
+  const container = useRef<HTMLDivElement>(null);
+  const map = useRef<mapboxgl.Map | null>(null);
+  const markers = useRef(new Map<string, { marker: mapboxgl.Marker; el: HTMLDivElement; pin: Pin }>());
+  // latest callbacks/values without re-creating the map or markers
+  const latest = useRef({ onHover, onPick, linkQuery, router, activeId });
+  useEffect(() => {
+    latest.current = { onHover, onPick, linkQuery, router, activeId };
+  });
 
+  // Create the map once.
+  useEffect(() => {
+    if (!container.current) return;
+    mapboxgl.accessToken = MAPBOX_TOKEN;
+    if (locale === "ar" && mapboxgl.getRTLTextPluginStatus() === "unavailable") {
+      mapboxgl.setRTLTextPlugin("https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-rtl-text/v0.3.0/mapbox-gl-rtl-text.js", null, true);
+    }
+    const first = pins[0];
+    const m = new mapboxgl.Map({
+      container: container.current,
+      style: "mapbox://styles/mapbox/streets-v12",
+      projection: "mercator",
+      center: first ? [first.lng, first.lat] : MOROCCO_CENTER,
+      zoom: zoom ?? (first ? 11 : 4.6),
+      attributionControl: false,
+      dragRotate: false,
+      pitchWithRotate: false,
+    });
+    m.touchZoomRotate.disableRotation();
+    m.addControl(new mapboxgl.NavigationControl({ showCompass: false }), "top-left");
+    m.addControl(new mapboxgl.AttributionControl({ compact: true }), "bottom-right");
+    m.on("style.load", () => prepareStoryStyle(m, locale, { declutter: false }));
+    m.on("click", (e) => {
+      if (picker) latest.current.onPick?.(e.lngLat.lat, e.lngLat.lng);
+    });
+    if (picker) m.getCanvas().style.cursor = "crosshair";
+    map.current = m;
+    const current = markers.current;
+    return () => {
+      current.clear();
+      m.remove();
+      map.current = null;
+    };
+    // created once per mount (locale / mode changes remount the component)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Sync markers with pins (add / move / remove), then frame the results.
+  useEffect(() => {
+    const m = map.current;
+    if (!m) return;
+    const seen = new Set<string>();
+    for (const pin of pins) {
+      seen.add(pin.id);
+      const existing = markers.current.get(pin.id);
+      if (existing) {
+        existing.marker.setLngLat([pin.lng, pin.lat]);
+        if (pin.price != null && existing.pin.price !== pin.price) existing.el.textContent = formatMAD(pin.price, locale);
+        existing.pin = pin;
+        continue;
+      }
+      const el = document.createElement("div");
+      if (pin.price != null) {
+        el.className = "map-price-pin";
+        el.dataset.active = String(pin.id === latest.current.activeId);
+        el.textContent = formatMAD(pin.price, locale);
+        if (!picker) {
+          el.addEventListener("mouseenter", () => latest.current.onHover?.(pin.id));
+          el.addEventListener("mouseleave", () => latest.current.onHover?.(null));
+          el.addEventListener("click", (e) => {
+            e.stopPropagation();
+            const { router: r, linkQuery: q } = latest.current;
+            r.push(`/cars/${pin.id}${q ? `?${q}` : ""}`);
+          });
+        }
+      } else {
+        el.className = "map-dot-pin";
+      }
+      const marker = new mapboxgl.Marker({ element: el }).setLngLat([pin.lng, pin.lat]).addTo(m);
+      markers.current.set(pin.id, { marker, el, pin });
+    }
+    for (const [id, entry] of markers.current) {
+      if (!seen.has(id)) {
+        entry.marker.remove();
+        markers.current.delete(id);
+      }
+    }
+
+    if (picker) return; // the host drives the view while picking
+    const priced = pins.filter((p) => p.price != null);
+    const frame = priced.length ? priced : pins;
+    if (frame.length === 0) m.jumpTo({ center: MOROCCO_CENTER, zoom: 4.6 });
+    else if (frame.length === 1) m.jumpTo({ center: [frame[0].lng, frame[0].lat], zoom: zoom ?? 12 });
+    else {
+      const b = new mapboxgl.LngLatBounds();
+      frame.forEach((p) => b.extend([p.lng, p.lat]));
+      m.fitBounds(b, { padding: 56, maxZoom: 13, duration: 0 });
+    }
+  }, [pins, picker, zoom, locale]);
+
+  // Highlight the car hovered in the list.
+  useEffect(() => {
+    for (const [id, { el }] of markers.current) {
+      if (!el.classList.contains("map-price-pin")) continue;
+      el.setAttribute("data-active", String(id === activeId));
+    }
+  }, [activeId]);
+
+  // mapbox-gl.css forces .mapboxgl-map to position:relative, so position a wrapper instead.
   return (
-    <MapContainer
-      center={stable[0] ? [stable[0].lat, stable[0].lng] : MOROCCO_CENTER}
-      zoom={zoom ?? 6}
-      scrollWheelZoom
-      className="h-full w-full"
-      attributionControl
-    >
-      <TileLayer attribution={MAPBOX_ATTRIBUTION} url={MAPBOX_TILES} tileSize={512} zoomOffset={-1} maxZoom={19} />
-      {!picker && <FitBounds pins={stable} />}
-      {picker && onPick && <ClickToPick onPick={onPick} />}
-      {stable.map((p) => (
-        <Marker
-          key={p.id}
-          position={[p.lat, p.lng]}
-          icon={p.price != null ? priceIcon(formatMAD(p.price, locale), p.id === activeId) : dotIcon}
-          zIndexOffset={p.id === activeId ? 1000 : 0}
-          eventHandlers={
-            picker || p.price == null
-              ? {}
-              : {
-                  mouseover: () => onHover?.(p.id),
-                  mouseout: () => onHover?.(null),
-                  click: () => router.push(`/cars/${p.id}${linkQuery ? `?${linkQuery}` : ""}`),
-                }
-          }
-        />
-      ))}
-    </MapContainer>
+    <div className="absolute inset-0">
+      <div ref={container} className="size-full" />
+    </div>
   );
 }

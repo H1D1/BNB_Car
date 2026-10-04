@@ -26,10 +26,13 @@ export function toMoroccoWorldview(expr: unknown): unknown {
 // Layers that add noise (and tile/label work) at country-scale storytelling zooms.
 const NOISE = /poi|building|transit|aeroway|airport|ferry|road-label|road-number|road-exit|golf|pitch|path|bridge-pedestrian|tunnel-path/;
 
-/** Moroccan worldview, labels in the visitor's language, and a decluttered basemap. */
-export function prepareStoryStyle(map: MapboxMap, locale: Locale) {
+/**
+ * Moroccan worldview and labels in the visitor's language. `declutter` also drops POIs, transit,
+ * buildings and road labels (for country-scale storytelling); app maps keep them.
+ */
+export function prepareStoryStyle(map: MapboxMap, locale: Locale, { declutter = true } = {}) {
   for (const layer of map.getStyle()?.layers ?? []) {
-    if (NOISE.test(layer.id)) {
+    if (declutter && NOISE.test(layer.id)) {
       map.removeLayer(layer.id);
       continue;
     }

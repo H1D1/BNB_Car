@@ -3,6 +3,7 @@ import { getI18n } from "@/lib/i18n/server";
 import { createClient, getProfile } from "@/lib/supabase/server";
 import { Logo } from "./Logo";
 import { HeaderControls } from "./HeaderControls";
+import { HeaderLive } from "./HeaderLive";
 import { ButtonLink } from "../ui/Button";
 
 async function getCounts(userId: string, isHost: boolean) {
@@ -70,6 +71,7 @@ export async function Header() {
               {t("nav.becomeHost")}
             </ButtonLink>
           )}
+          {profile && <HeaderLive userId={profile.id} />}
           <HeaderControls
             profile={profile ? { id: profile.id, full_name: profile.full_name, avatar_url: profile.avatar_url, active_mode: profile.active_mode, is_host: profile.is_host } : null}
             links={links}

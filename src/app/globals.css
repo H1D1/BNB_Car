@@ -343,38 +343,36 @@ html.light .atmosphere .zellige {
   }
 }
 
-/* Leaflet theming */
-.leaflet-container {
-  background: var(--map-bg) !important;
-  font-family: var(--font-sans) !important;
-  border-radius: inherit;
+/* App maps (Mapbox GL): Airbnb-style price pills and location dot */
+.mapboxgl-map {
+  background: var(--map-bg);
+  font-family: var(--font-sans);
 }
-.leaflet-control-attribution {
-  background: var(--map-ui-bg) !important;
-  color: var(--map-ui-fg) !important;
-  opacity: 0.7;
+.map-price-pin {
+  padding: 6px 11px;
+  border-radius: 9999px;
+  background: #fff;
+  color: #151a3d;
+  font: 700 13px/1 var(--font-sans);
+  white-space: nowrap;
+  cursor: pointer;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.06), 0 2px 6px rgba(0, 0, 0, 0.18), 0 6px 16px rgba(0, 0, 0, 0.12);
+  transition: transform 0.2s var(--ease-liquid), background-color 0.2s, color 0.2s;
 }
-.leaflet-control-attribution a {
-  color: var(--map-ui-fg) !important;
+.map-price-pin:hover,
+.map-price-pin[data-active="true"] {
+  background: #151a3d;
+  color: #fff;
+  transform: scale(1.08);
+  z-index: 2;
 }
-.leaflet-popup-content-wrapper,
-.leaflet-popup-tip {
-  background: var(--menu-solid) !important;
-  color: var(--fg) !important;
-  border: 1px solid var(--menu-border);
-}
-.leaflet-control-zoom a {
-  background: var(--map-ui-bg) !important;
-  color: var(--map-ui-fg) !important;
-  border-color: var(--menu-border) !important;
-}
-/* Streets basemap is light; soften it slightly inside the dark UI. */
-html:not(.light) .leaflet-tile-pane {
-  filter: brightness(0.9) saturate(0.92);
-}
-.price-pin {
-  background: none !important;
-  border: none !important;
+.map-dot-pin {
+  width: 22px;
+  height: 22px;
+  border-radius: 9999px;
+  background: #6050dc;
+  border: 4px solid #fff;
+  box-shadow: 0 0 0 10px rgba(96, 80, 220, 0.18), 0 2px 8px rgba(0, 0, 0, 0.3);
 }
 
 /* ---------------------------------------------------------------------------

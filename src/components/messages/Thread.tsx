@@ -8,6 +8,7 @@ import { AlertCircle, ArrowLeft, CalendarCheck, Languages, Loader2, MessageCircl
 import { useI18n } from "@/lib/i18n/client";
 import { tDyn } from "@/lib/i18n/config";
 import { createClient } from "@/lib/supabase/client";
+import { subscribeAsUser } from "@/lib/supabase/realtime";
 import { translateMessage } from "@/app/actions/messages";
 import { cn, formatDate, whatsappLink } from "@/lib/utils";
 import type { Message } from "@/lib/types";
@@ -62,27 +63,25 @@ export function Thread({
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only on open
   }, [conversationId]);
 
-  // realtime: new messages in this conversation
-  useEffect(() => {
-    const channel = supabase
-      .channel(`conversation:${conversationId}`)
-      .on(
-        "postgres_changes",
-        { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${conversationId}` },
-        (payload) => {
-          const msg = payload.new as Message;
-          setMessages((list) => (list.some((m) => m.id === msg.id) ? list.map((m) => (m.id === msg.id ? msg : m)) : [...list, msg]));
-          if (msg.sender_id !== me) {
-            if (document.visibilityState === "visible") markRead();
-            router.refresh();
-          }
-        },
-      )
-      .subscribe();
-    return () => {
-      supabase.removeChannel(channel);
-    };
-  }, [supabase, conversationId, me, markRead, router]);
+  // realtime: new messages in this conversation (authenticated socket — RLS filters events)
+  useEffect(
+    () =>
+      subscribeAsUser(supabase, (client) =>
+        client.channel(`conversation:${conversationId}`).on(
+          "postgres_changes",
+          { event: "INSERT", schema: "public", table: "messages", filter: `conversation_id=eq.${conversationId}` },
+          (payload) => {
+            const msg = payload.new as Message;
+            setMessages((list) => (list.some((m) => m.id === msg.id) ? list.map((m) => (m.id === msg.id ? msg : m)) : [...list, msg]));
+            if (msg.sender_id !== me) {
+              if (document.visibilityState === "visible") markRead();
+              router.refresh();
+            }
+          },
+        ),
+      ),
+    [supabase, conversationId, me, markRead, router],
+  );
 
   // auto-scroll to the newest message
   useEffect(() => {
