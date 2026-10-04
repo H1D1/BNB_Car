@@ -47,26 +47,31 @@ export default async function Home() {
     <div className="overflow-x-clip">
       <Hero places={places} />
 
-      {/* Live strip of real listings */}
-      <section className="py-14 md:py-20" aria-labelledby="live-title">
-        <div className="mx-auto mb-6 flex max-w-7xl items-end justify-between gap-4 px-4 md:px-6">
-          <h2 id="live-title" className="text-2xl font-bold tracking-tight md:text-3xl">
-            {t("home.liveTitle")}
-          </h2>
-          <Link href="/search" className="text-sm font-semibold text-majorelle-300 hover:underline">
-            {t("common.seeAll")}
-          </Link>
-        </div>
-        <CarMarquee cars={featured.slice(0, 14)} cityName={cityName} perDay={t("common.perDay")} />
-      </section>
+      {/* Live strip of real listings (needs enough cars to fill a marquee) */}
+      {featured.length >= 4 && (
+              <section className="py-14 md:py-20" aria-labelledby="live-title">
+          <div className="mx-auto mb-6 flex max-w-7xl items-end justify-between gap-4 px-4 md:px-6">
+            <h2 id="live-title" className="text-2xl font-bold tracking-tight md:text-3xl">
+              {t("home.liveTitle")}
+            </h2>
+            <Link href="/search" className="text-sm font-semibold text-majorelle-300 hover:underline">
+              {t("common.seeAll")}
+            </Link>
+          </div>
+          <CarMarquee cars={featured.slice(0, 14)} cityName={cityName} perDay={t("common.perDay")} />
+        </section>
+      )}
 
       <RouteFilm />
 
-      <ShowcasePlayer
-        cars={showcaseCars.map(({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }) => ({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }))}
-        city={cityName.casablanca ?? "Casablanca"}
-        hostName={showcaseHost}
-      />
+      {/* the demo plays a real Casablanca listing, so it waits for one */}
+      {showcaseCars.length > 0 && (
+        <ShowcasePlayer
+          cars={showcaseCars.map(({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }) => ({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }))}
+          city={cityName.casablanca ?? "Casablanca"}
+          hostName={showcaseHost}
+        />
+      )}
 
       {/* Categories — each car on its own lit stage, with live supply & price */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" aria-labelledby="cat-title">
@@ -88,7 +93,7 @@ export default async function Home() {
                   <span className="font-bold">{t(`car.category.${c}`)}</span>
                   <span className="mt-1 text-xs text-white/50">{t(`car.categoryHint.${c}`)}</span>
                   <span className="mt-auto flex items-baseline justify-between gap-2 border-t border-white/10 pt-3 text-xs">
-                    <span className="text-white/60">{t("home.board.cars", { count: stat?.count ?? 0 })}</span>
+                    <span className="text-white/60">{stat ? t("home.board.cars", { count: stat.count }) : t("home.board.soon")}</span>
                     {stat && (
                       <span className="font-semibold" dir="ltr">
                         {t("home.board.from")} {formatMAD(stat.from, locale)}
@@ -121,7 +126,7 @@ export default async function Home() {
                 <span className="min-w-0 flex-1">
                   <span className="block leading-snug font-semibold">{a.name}</span>
                   <span className="mt-0.5 block text-xs text-white/55">
-                    {a.city} · {t("home.board.cars", { count: a.count })}
+                    {a.city} · {a.count ? t("home.board.cars", { count: a.count }) : t("home.board.soon")}
                     {a.from != null && (
                       <>
                         {" · "}

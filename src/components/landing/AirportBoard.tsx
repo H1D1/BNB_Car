@@ -63,13 +63,15 @@ export function AirportBoard({ rows }: { rows: BoardRow[] }) {
   }, [visible]);
 
   const info = (r: BoardRow) =>
-    phase % 2 === 0
-      ? t("home.board.cars", { count: r.count })
-      : r.from == null
-        ? "—"
-        : compact
-          ? formatMAD(r.from, locale)
-          : `${t("home.board.from")} ${formatMAD(r.from, locale)}`;
+    r.count === 0
+      ? t("home.board.soon")
+      : phase % 2 === 0
+        ? t("home.board.cars", { count: r.count })
+        : r.from == null
+          ? "—"
+          : compact
+            ? formatMAD(r.from, locale)
+            : `${t("home.board.from")} ${formatMAD(r.from, locale)}`;
 
   return (
     <div ref={ref} className="relative overflow-hidden rounded-3xl bg-[#0b0f2e] p-3 text-[#eef0ff] sm:p-4 shadow-[inset_0_1px_0_rgba(255,255,255,0.08),0_20px_50px_-20px_rgba(5,8,22,0.8)] md:p-5">

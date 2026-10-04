@@ -1,13 +1,13 @@
 // Seeds places, demo users, cars, past trips and reviews.
 // Usage: npm run db:seed            (only if no cars exist yet)
 //        npm run db:seed -- --force (wipes cars/bookings/reviews first)
+//        npm run db:seed -- --places-only --prod  (cities & airports only, for the real-data project)
 import pg from 'pg';
-import dotenv from 'dotenv';
+import { refuseProduction } from './env.mjs';
 import { createClient } from '@supabase/supabase-js';
 
-dotenv.config({ path: '.env.local', quiet: true });
-
 const force = process.argv.includes('--force');
+const placesOnly = process.argv.includes('--places-only'); // reference data only; the one mode allowed on production
 const db = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 const admin = createClient(process.env.NEXT_PUBLIC_SUPABASE_URL, process.env.SUPABASE_SERVICE_ROLE_KEY, {
   auth: { persistSession: false, autoRefreshToken: false },
@@ -204,6 +204,11 @@ async function main() {
     );
   }
   console.log(`places: ${PLACES.length}`);
+  if (placesOnly) {
+    await db.end();
+    return;
+  }
+  await refuseProduction(db, 'the demo seed');
 
   const { rows: [{ n }] } = await db.query('select count(*)::int n from public.cars');
   if (n > 0 && !force) {

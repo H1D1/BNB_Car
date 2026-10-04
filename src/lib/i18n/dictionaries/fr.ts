@@ -123,6 +123,7 @@ export const fr: Dict = {
       info: "Voitures",
       cars: "{count} voitures",
       from: "dès",
+      soon: "Bientôt",
     },
     howTitle: "Comment ça marche",
     steps: {

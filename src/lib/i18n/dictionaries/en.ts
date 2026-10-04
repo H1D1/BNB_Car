@@ -121,6 +121,7 @@ export const en = {
       info: "Cars",
       cars: "{count} cars",
       from: "from",
+      soon: "Soon",
     },
     howTitle: "How it works",
     steps: {

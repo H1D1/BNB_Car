@@ -123,6 +123,7 @@ export const ar: Dict = {
       info: "السيارات",
       cars: "{count} سيارة",
       from: "ابتداءً من",
+      soon: "قريبًا",
     },
     howTitle: "كيف تعمل المنصة",
     steps: {

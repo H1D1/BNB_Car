@@ -13,10 +13,8 @@
 // Usage: npm run db:import-avito
 //        npm run db:seed -- --force   (restore the original demo catalogue)
 import pg from 'pg';
-import dotenv from 'dotenv';
+import { refuseProduction } from './env.mjs';
 import { readdir, readFile } from 'node:fs/promises';
-
-dotenv.config({ path: '.env.local', quiet: true });
 
 const CACHE_DIR = '.cache';
 const PHOTOS_PER_CAR = 6;
@@ -133,6 +131,7 @@ function diversify(listings, n) {
 
 async function main() {
   await db.connect();
+  await refuseProduction(db, 'the Avito import');
 
   const { rows: cars } = await db.query(`
     select c.id, c.host_id, c.airport_slugs from cars c

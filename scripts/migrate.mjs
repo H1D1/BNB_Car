@@ -1,11 +1,10 @@
 // Applies supabase/migrations/*.sql in order, tracking applied files in public._migrations.
-// Usage: npm run db:migrate
+// Usage: npm run db:migrate            (dev project, .env.local)
+//        npm run db:migrate -- --prod  (real-data project, .env.production.local; also marks it as production)
 import { readdir, readFile } from 'node:fs/promises';
 import path from 'node:path';
 import pg from 'pg';
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local', quiet: true });
+import { PROD } from './env.mjs';
 
 const dir = path.resolve('supabase/migrations');
 const client = new pg.Client({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
@@ -32,5 +31,12 @@ for (const file of (await readdir(dir)).filter((f) => f.endsWith('.sql')).sort()
     process.exitCode = 1;
     break;
   }
+}
+if (PROD && !process.exitCode) {
+  // read by refuseProduction() in scripts/env.mjs (RLS on, no policies: invisible to the API)
+  await client.query(`create table if not exists public._environment (name text primary key);
+    alter table public._environment enable row level security;
+    insert into public._environment values ('production') on conflict do nothing;`);
+  console.log('marked database as production');
 }
 await client.end();
