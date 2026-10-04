@@ -81,3 +81,8 @@ Accounts are created pre-confirmed because the Supabase project has no SMTP prov
 | `npm run build` | Production build |
 | `npm run db:migrate` | Apply pending SQL migrations (tracked in `public._migrations`) |
 | `npm run db:seed` | Seed demo data (`-- --force` to wipe & reseed cars/bookings) |
+
+## Media credits
+
+- Landing-page video loops (`public/media/*.mp4`): [Mixkit](https://mixkit.co) free stock video (Mixkit License), re-encoded as short muted loops.
+- Map outline (`src/lib/morocco-map.ts`): [Natural Earth](https://www.naturalearthdata.com) (public domain), Morocco including its southern provinces as one outline.

@@ -66,7 +66,7 @@ export async function Header() {
         </nav>
         <div className="ms-auto flex items-center gap-2">
           {!profile && (
-            <ButtonLink href="/host/cars/new" variant="ghost" size="sm" className="hidden md:inline-flex">
+            <ButtonLink href="/host/cars/new" variant="ghost" size="sm" className="max-md:hidden">
               {t("nav.becomeHost")}
             </ButtonLink>
           )}

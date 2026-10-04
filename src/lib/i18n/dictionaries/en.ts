@@ -82,6 +82,23 @@ export const en = {
     browseCategories: "Browse by category",
     airportsTitle: "Land and drive",
     airportsSubtitle: "Owners deliver to Morocco's main airports — skip the rental-desk queue.",
+    liveTitle: "On the road this week",
+    hostChartLabel: "A Casablanca host, this month",
+    route: {
+      title: "From Tangier to Dakhla",
+      subtitle: "Hosts all along the Atlantic road. Scroll to drive it.",
+      mapLabel: "Map of Morocco with the route from Tangier to Dakhla",
+      cars: "{count} cars",
+      cta: "See cars here",
+      stops: {
+        tangier: "Off the ferry from Tarifa or the Al Boraq train, pick up at Ibn Battouta airport.",
+        rabat: "The capital: hand-over at Rabat-Agdal station or at your hotel.",
+        casablanca: "The most cars in the country, from city runabouts to business sedans, delivered to Mohammed V airport.",
+        marrakech: "Delivery to your riad in the Medina, then the Atlas for the day.",
+        agadir: "Roof racks for surfboards, beaches and Al Massira airport.",
+        dakhla: "Kite lagoons at the end of the Atlantic road.",
+      },
+    },
     howTitle: "How it works",
     steps: {
       oneTitle: "Find the right car",

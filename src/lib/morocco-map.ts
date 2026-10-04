@@ -1,0 +1,7 @@
+// Generated from Natural Earth (Morocco incl. its southern provinces, merged into one outline).
+// Equirectangular projection at 29°N. Regenerate rather than hand-edit.
+export const MAP_VIEWBOX = "0 0 424 448";
+export const MOROCCO_OUTLINE = "M12.0 435.5 L14.3 410.1 L23.9 402.3 L32.0 387.5 L30.5 377.6 L39.1 357.4 L53.1 339.1 L61.6 334.4 L68.2 317.8 L68.8 302.5 L77.8 284.7 L94.6 274.3 L110.5 245.0 L123.5 233.6 L146.9 230.3 L166.7 210.8 L179.3 203.1 L200.1 179.3 L193.9 143.5 L203.4 118.8 L206.8 103.7 L223.0 84.3 L248.1 71.2 L266.7 59.3 L283.5 29.6 L291.4 12.0 L309.9 12.1 L325.1 24.3 L348.9 22.3 L374.9 28.7 L385.8 29.0 L395.2 47.4 L396.7 64.8 L405.4 95.0 L412.0 101.2 L407.4 112.3 L374.7 117.2 L363.2 127.8 L348.9 130.3 L347.6 151.5 L318.3 162.9 L308.7 177.3 L288.1 185.0 L263.0 189.4 L222.7 210.5 L222.2 295.5 L140.0 294.1 L140.6 367.4 L117.0 370.2 L111.0 384.8 L115.8 426.1 L17.7 426.0 L12.0 435.5 Z";
+export const ROUTE_PATH = "M293.8 12.0 C289.6 20.3 275.9 51.4 268.5 61.9 C261.1 72.3 254.5 63.3 249.7 74.7 C244.9 86.1 248.3 115.5 239.9 130.5 C231.5 145.6 232.7 127.0 199.3 165.0 C165.9 203.0 66.3 326.2 39.7 358.5";
+export const ROUTE_ORDER = ["tangier", "rabat", "casablanca", "marrakech", "agadir", "dakhla"] as const;
+export const CITY_POINTS: Record<string, [number, number]> = {"tangier": [293.8, 12.0], "rabat": [268.5, 61.9], "casablanca": [249.7, 74.7], "marrakech": [239.9, 130.5], "agadir": [199.3, 165.0], "dakhla": [39.7, 358.5], "fes": [314.5, 62.0], "essaouira": [195.3, 134.0]};

@@ -84,6 +84,23 @@ export const fr: Dict = {
     browseCategories: "Parcourir par catégorie",
     airportsTitle: "Atterrissez et roulez",
     airportsSubtitle: "Les propriétaires livrent dans les principaux aéroports du Maroc — évitez la file des loueurs.",
+    liveTitle: "Sur la route cette semaine",
+    hostChartLabel: "Un hôte à Casablanca, ce mois-ci",
+    route: {
+      title: "De Tanger à Dakhla",
+      subtitle: "Des hôtes tout le long de la route atlantique. Faites défiler pour la parcourir.",
+      mapLabel: "Carte du Maroc avec l’itinéraire de Tanger à Dakhla",
+      cars: "{count} voitures",
+      cta: "Voir les voitures ici",
+      stops: {
+        tangier: "À la sortie du ferry de Tarifa ou du train Al Boraq, prise en charge à l’aéroport Ibn Battouta.",
+        rabat: "La capitale : remise des clés à la gare Rabat-Agdal ou à votre hôtel.",
+        casablanca: "Le plus de voitures du pays, de la citadine à la berline d’affaires, livrées à l’aéroport Mohammed V.",
+        marrakech: "Livraison à votre riad dans la médina, puis l’Atlas pour la journée.",
+        agadir: "Porte-planches pour le surf, plages et aéroport Al Massira.",
+        dakhla: "Les lagunes du kitesurf au bout de la route atlantique.",
+      },
+    },
     howTitle: "Comment ça marche",
     steps: {
       oneTitle: "Trouvez la bonne voiture",

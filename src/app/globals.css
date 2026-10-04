@@ -377,12 +377,148 @@ html:not(.light) .leaflet-tile-pane {
   border: none !important;
 }
 
+/* ---------------------------------------------------------------------------
+   Motion graphics (landing page)
+   One orchestrated hero entrance; everything else is scroll-scrubbed or loops
+   only while visible. All of it collapses to the end state under reduced motion.
+--------------------------------------------------------------------------- */
+@keyframes line-up {
+  from { transform: translateY(105%); }
+  to { transform: translateY(0); }
+}
+@keyframes settle {
+  from { transform: scale(1.12); }
+  to { transform: scale(1); }
+}
+@keyframes rise {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes marquee {
+  to { transform: translateX(-50%); }
+}
+@keyframes marquee-rtl {
+  to { transform: translateX(50%); }
+}
+@keyframes pin-drop {
+  0%, 8% { transform: translateY(-46px); opacity: 0; }
+  18% { transform: translateY(0); opacity: 1; }
+  24% { transform: translateY(-7px); }
+  30%, 88% { transform: translateY(0); opacity: 1; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+@keyframes pill-pop {
+  0%, 22% { transform: scale(0.4); opacity: 0; }
+  32%, 88% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@keyframes scan {
+  0%, 8% { transform: translateY(0); opacity: 0; }
+  12% { opacity: 1; }
+  52% { transform: translateY(150px); opacity: 1; }
+  58%, 100% { transform: translateY(150px); opacity: 0; }
+}
+@keyframes check-in {
+  0%, 55% { transform: scale(0); opacity: 0; }
+  66% { transform: scale(1.15); opacity: 1; }
+  72%, 92% { transform: scale(1); opacity: 1; }
+  100% { transform: scale(1); opacity: 0; }
+}
+@keyframes road {
+  to { stroke-dashoffset: -60; }
+}
+@keyframes beam {
+  0%, 20% { opacity: 0; }
+  30%, 100% { opacity: 1; }
+}
+@keyframes bob {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-2px); }
+}
+@keyframes draw {
+  from { stroke-dashoffset: 1; }
+  to { stroke-dashoffset: 0; }
+}
+@keyframes ping-ring {
+  0% { transform: scale(0.6); opacity: 0.9; }
+  100% { transform: scale(2.6); opacity: 0; }
+}
+
+.reveal-line {
+  display: block;
+  overflow: hidden;
+  padding-bottom: 0.08em;
+}
+.reveal-line > span {
+  display: inline-block;
+  transform: translateY(105%);
+  animation: line-up 1s var(--ease-liquid) forwards;
+  animation-delay: var(--d, 0ms);
+}
+.rise-in {
+  opacity: 0;
+  animation: rise 0.9s var(--ease-liquid) forwards;
+  animation-delay: var(--d, 0ms);
+}
+.video-settle {
+  animation: settle 2.8s var(--ease-liquid) both;
+}
+
+.marquee-track {
+  animation: marquee var(--marquee-duration, 60s) linear infinite;
+}
+html[dir="rtl"] .marquee-track {
+  animation-name: marquee-rtl;
+}
+.marquee:hover .marquee-track,
+.marquee:focus-within .marquee-track {
+  animation-play-state: paused;
+}
+
+/* Illustrations only animate while their step is on screen and active. */
+.mg [data-anim] {
+  animation-play-state: paused;
+}
+.mg[data-active="true"] [data-anim] {
+  animation-play-state: running;
+}
+.mg .pin { animation: pin-drop 4.2s var(--ease-liquid) infinite; transform-box: fill-box; transform-origin: bottom center; }
+.mg .pill { animation: pill-pop 4.2s var(--ease-liquid) infinite; transform-box: fill-box; transform-origin: center; }
+.mg .scanline { animation: scan 3.6s ease-in-out infinite; }
+.mg .check { animation: check-in 3.6s var(--ease-liquid) infinite; transform-box: fill-box; transform-origin: center; }
+.mg .lane { animation: road 0.8s linear infinite; }
+.mg .beam { animation: beam 2.4s ease-out infinite alternate; }
+.mg .bob { animation: bob 1.2s ease-in-out infinite; }
+
+.draw-on-view {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 1;
+}
+.in-view .draw-on-view {
+  animation: draw 2.2s var(--ease-liquid) forwards;
+  animation-delay: var(--d, 200ms);
+}
+.ping::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: currentColor;
+  animation: ping-ring 1.8s ease-out infinite;
+}
+
 /* Accessibility & performance fallbacks */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.001ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+  /* looping illustrations: show their resting composition instead */
+  .mg [data-anim] { animation: none !important; }
+  .mg .scanline, .marquee-track { animation: none !important; }
+  .mg .scanline { display: none; }
 }
 @media (prefers-reduced-transparency: reduce) {
   .glass, .glass-strong, .glass-menu {
