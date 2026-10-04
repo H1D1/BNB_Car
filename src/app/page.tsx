@@ -8,10 +8,10 @@ import { Hero } from "@/components/landing/Hero";
 import { CarMarquee } from "@/components/landing/CarMarquee";
 import { ShowcasePlayer } from "@/components/landing/ShowcasePlayer";
 import { HostBanner } from "@/components/landing/HostBanner";
+import { CategoryIcon } from "@/components/landing/CategoryIcon";
 import { Glass } from "@/components/ui/primitives";
 import type { CarCategory } from "@/lib/types";
 
-const CATEGORY_EMOJI: Record<CarCategory, string> = { city: "🚗", compact: "🚙", sedan: "🚘", suv: "🛻", luxury: "✨", van: "🚐" };
 
 async function getCityCounts() {
   const supabase = await createClient();
@@ -67,9 +67,7 @@ export default async function Home() {
         <div className="scrollbar-none -mx-4 flex snap-x gap-3 overflow-x-auto px-4 md:mx-0 md:grid md:grid-cols-6 md:px-0">
           {categories.map((c) => (
             <Link key={c} href={`/search?category=${c}`} className="glass liquid group min-w-40 snap-start rounded-2xl p-5">
-              <span className="inline-block text-3xl transition-transform duration-500 ease-[var(--ease-liquid)] group-hover:-translate-y-1 group-hover:rotate-[-6deg]">
-                {CATEGORY_EMOJI[c]}
-              </span>
+              <CategoryIcon category={c} />
               <p className="mt-3 font-bold">{t(`car.category.${c}`)}</p>
               <p className="mt-1 text-xs text-white/50">{t(`car.categoryHint.${c}`)}</p>
             </Link>

@@ -457,6 +457,26 @@ html[dir="rtl"] .marquee-track {
   animation: ping-ring 1.8s ease-out infinite;
 }
 
+/* Category icons: 2.4 s loop — wheels, suspension, road, speed lines, headlight flash, coupé sweep. */
+@keyframes cat-spin { to { transform: rotate(360deg); } }
+@keyframes cat-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.2px); } }
+@keyframes cat-road { to { stroke-dashoffset: -18; } }
+@keyframes cat-speed { from { transform: translateX(10px); opacity: 0; } 40% { opacity: 1; } to { transform: translateX(-14px); opacity: 0; } }
+@keyframes cat-beam { 0%, 70%, 100% { opacity: 0; } 78%, 92% { opacity: 1; } 85% { opacity: 0.35; } }
+@keyframes cat-shine { 0%, 45% { transform: skewX(-20deg) translateX(0); } 85%, 100% { transform: skewX(-20deg) translateX(170px); } }
+@keyframes cat-drive { 0%, 100% { transform: translateX(-2px); } 50% { transform: translateX(2px); } }
+.cat-icon { animation: cat-drive 2.4s ease-in-out infinite; }
+.cat-icon .wheel { animation: cat-spin 0.8s linear infinite; transform-box: fill-box; transform-origin: center; }
+.cat-icon .body { animation: cat-bob 0.6s ease-in-out infinite; }
+.cat-icon .road { animation: cat-road 0.8s linear infinite; }
+.cat-icon .speed line { animation: cat-speed 0.8s linear infinite; }
+.cat-icon .speed line:nth-child(2) { animation-delay: 0.35s; }
+.cat-icon .beam { animation: cat-beam 2.4s ease-in-out infinite; }
+.cat-icon .shine { animation: cat-shine 2.4s ease-in-out infinite; }
+.group:hover .cat-icon .wheel,
+.group:hover .cat-icon .road,
+.group:hover .cat-icon .speed line { animation-duration: 0.4s; }
+
 /* App demo (phone motion graphic): entrances are CSS keyframes, typing/count-up are JS. */
 @keyframes demo-up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: none; } }
 @keyframes demo-pop { 0% { opacity: 0; transform: scale(0.6); } 70% { opacity: 1; transform: scale(1.06); } 100% { opacity: 1; transform: scale(1); } }
@@ -534,13 +554,10 @@ html[lang="ar"] .route-city-label { font-family: var(--font-arabic); }
 
 /* Accessibility & performance fallbacks */
 @media (prefers-reduced-motion: reduce) {
+  /* Shorten UI transitions; ambient loops (videos, marquee, icons) keep playing by design. */
   *, *::before, *::after {
-    animation-duration: 0.001ms !important;
-    animation-delay: 0s !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.001ms !important;
+    transition-duration: 0.12s !important;
   }
-  .marquee-track { animation: none !important; }
 }
 @media (prefers-reduced-transparency: reduce) {
   .glass, .glass-strong, .glass-menu {

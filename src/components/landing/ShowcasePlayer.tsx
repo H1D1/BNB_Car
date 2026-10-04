@@ -3,20 +3,19 @@
 import { useEffect, useRef } from "react";
 import { Player, type PlayerRef } from "@remotion/player";
 import { useI18n } from "@/lib/i18n/client";
-import { useInView, useMediaQuery, useReducedMotion } from "@/lib/motion";
+import { useInView, useMediaQuery } from "@/lib/motion";
 import { AppShowcase, SHOWCASE_FPS, SHOWCASE_FRAMES, type ShowcaseCar } from "@/remotion/showcase/AppShowcase";
 
 /**
  * The app's motion-graphics film (Remotion composition), played live in the page: frame-exact,
- * localized, theme-aware, nothing to download. Auto-plays on screen, pauses off screen;
- * reduced-motion visitors get a still frame with controls.
+ * localized, theme-aware, nothing to download. Loops continuously with no controls; it only
+ * pauses while off screen to save battery.
  */
 export function ShowcasePlayer({ cars, city, hostName }: { cars: ShowcaseCar[]; city: string; hostName: string }) {
   const { t, locale } = useI18n();
   const wrap = useRef<HTMLDivElement>(null);
   const player = useRef<PlayerRef>(null);
   const visible = useInView(wrap, { once: false, margin: "0px" });
-  const reduced = useReducedMotion();
   const tall = useMediaQuery("(max-width: 767px)");
 
   useEffect(() => {
@@ -25,10 +24,10 @@ export function ShowcasePlayer({ cars, city, hostName }: { cars: ShowcaseCar[]; 
 
   useEffect(() => {
     const p = player.current;
-    if (!p || reduced) return;
+    if (!p) return;
     if (visible) p.play();
     else p.pause();
-  }, [visible, reduced, tall]);
+  }, [visible, tall]);
 
   return (
     <section className="mx-auto max-w-7xl px-4 py-16 md:px-6 md:py-24" aria-labelledby="showcase-title">
@@ -42,7 +41,7 @@ export function ShowcasePlayer({ cars, city, hostName }: { cars: ShowcaseCar[]; 
       </ol>
       <div ref={wrap} className="overflow-hidden rounded-[2rem] border border-white/10 shadow-[var(--glass-shadow-lg)]">
         <Player
-          key={`${tall ? "tall" : "wide"}-${reduced ? "still" : "play"}`}
+          key={tall ? "tall" : "wide"}
           ref={player}
           component={AppShowcase}
           inputProps={{ locale, cars, city, hostName, layout: tall ? "tall" : "wide" }}
@@ -52,11 +51,12 @@ export function ShowcasePlayer({ cars, city, hostName }: { cars: ShowcaseCar[]; 
           compositionHeight={tall ? 1350 : 1080}
           style={{ width: "100%" }}
           loop
-          autoPlay={!reduced}
+          autoPlay
           initiallyMuted
-          controls={reduced}
+          controls={false}
           clickToPlay={false}
-          initialFrame={reduced ? Math.round(8.2 * SHOWCASE_FPS) : 0}
+          doubleClickToFullscreen={false}
+          spaceKeyToPlayOrPause={false}
           acknowledgeRemotionLicense
         />
       </div>

@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useI18n } from "@/lib/i18n/client";
-import { useMediaQuery, useReducedMotion, useSaveData } from "@/lib/motion";
+import { useMediaQuery, useSaveData } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import type { Place } from "@/lib/types";
 import { SearchBar } from "../cars/SearchBar";
@@ -13,7 +13,7 @@ const MOBILE = { src: "/media/hero-road-vertical.mp4", poster: "/media/hero-road
 /**
  * Full-bleed driving footage behind the headline. The poster is server-rendered (instant, no
  * layout shift); the video is only mounted client-side, picked for the screen shape, skipped
- * entirely for reduced-motion / data-saver visitors, and paused when off-screen.
+ * entirely for data-saver visitors, and paused when off-screen.
  */
 function HeroVideo() {
   const mounted = useSyncExternalStore(
@@ -22,7 +22,6 @@ function HeroVideo() {
     () => false,
   );
   const mobile = useMediaQuery("(max-width: 767px)");
-  const reduced = useReducedMotion();
   const saveData = useSaveData();
   const [ready, setReady] = useState(false);
   const ref = useRef<HTMLVideoElement>(null);
@@ -42,7 +41,7 @@ function HeroVideo() {
         <source media="(max-width: 767px)" srcSet={MOBILE.poster} />
         <img src={DESKTOP.poster} alt="" className="absolute inset-0 size-full object-cover" fetchPriority="high" />
       </picture>
-      {mounted && !reduced && !saveData && (
+      {mounted && !saveData && (
         <video
           key={clip.src}
           ref={ref}

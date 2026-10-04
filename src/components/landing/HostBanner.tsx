@@ -2,7 +2,7 @@
 
 import { useEffect, useRef } from "react";
 import { useI18n } from "@/lib/i18n/client";
-import { useInView, useReducedMotion, useSaveData } from "@/lib/motion";
+import { useInView, useSaveData } from "@/lib/motion";
 import { formatMAD } from "@/lib/currency";
 import { cn } from "@/lib/utils";
 import { ButtonLink } from "../ui/Button";
@@ -15,9 +15,8 @@ export function HostBanner() {
   const ref = useRef<HTMLDivElement>(null);
   const video = useRef<HTMLVideoElement>(null);
   const inView = useInView(ref);
-  const reduced = useReducedMotion();
   const saveData = useSaveData();
-  const playVideo = inView && !reduced && !saveData;
+  const playVideo = inView && !saveData;
 
   useEffect(() => {
     if (playVideo) video.current?.play().catch(() => {});
@@ -31,7 +30,7 @@ export function HostBanner() {
       <div className="absolute inset-0 -z-10">
         {/* eslint-disable-next-line @next/next/no-img-element -- poster for the background loop */}
         <img src="/media/atlas-sunset.jpg" alt="" className="absolute inset-0 size-full object-cover" loading="lazy" />
-        {!reduced && !saveData && (
+        {!saveData && (
           <video
             ref={video}
             src="/media/atlas-sunset.mp4"

@@ -3,7 +3,7 @@ import Image from "@/components/ui/SmartImage";
 import { Price } from "@/components/ui/Price";
 import type { CarCard } from "@/lib/data";
 
-/** Slow, endless strip of real listings. Pauses on hover/focus; static under reduced motion. */
+/** Slow, endless strip of real listings. Pauses on hover/focus. */
 export function CarMarquee({ cars, cityName, perDay }: { cars: CarCard[]; cityName: Record<string, string>; perDay: string }) {
   const loop = [...cars, ...cars];
   return (
