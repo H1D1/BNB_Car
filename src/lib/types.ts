@@ -101,6 +101,7 @@ export interface CarPhoto {
   storage_path: string | null;
   kind: PhotoKind;
   position: number;
+  credit: string | null;
 }
 
 export interface Booking {

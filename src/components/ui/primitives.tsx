@@ -1,4 +1,4 @@
-import Image from "next/image";
+import Image from "@/components/ui/SmartImage";
 import { AlertCircle, CheckCircle2, Info, Star } from "lucide-react";
 import { cn, initials } from "@/lib/utils";
 

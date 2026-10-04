@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { Fuel, MapPin, Plane, Settings2, Users, Zap } from "lucide-react";
 import { useI18n } from "@/lib/i18n/client";

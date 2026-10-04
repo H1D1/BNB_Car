@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Image from "next/image";
+import Image from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { CalendarDays, Car as CarIcon, Clock, KeyRound, Plus, Star, Wallet } from "lucide-react";

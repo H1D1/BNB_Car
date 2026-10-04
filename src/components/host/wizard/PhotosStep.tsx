@@ -1,6 +1,6 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/SmartImage";
 import Link from "next/link";
 import { useRef, useState, useTransition } from "react";
 import { Armchair, Camera, CarFront, Check, ChevronLeft, ChevronRight, Gauge, ImagePlus, Loader2, Star, Trash2, X } from "lucide-react";

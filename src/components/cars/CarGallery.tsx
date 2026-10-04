@@ -1,12 +1,12 @@
 "use client";
 
-import Image from "next/image";
+import Image from "@/components/ui/SmartImage";
 import { useEffect, useState } from "react";
 import { ChevronLeft, ChevronRight, Grid2x2, X } from "lucide-react";
 import { useI18n } from "@/lib/i18n/client";
 import { cn } from "@/lib/utils";
 
-export function CarGallery({ photos, alt }: { photos: { id: string; url: string }[]; alt: string }) {
+export function CarGallery({ photos, alt }: { photos: { id: string; url: string; credit?: string | null }[]; alt: string }) {
   const { t, dir } = useI18n();
   const [open, setOpen] = useState<number | null>(null);
 
@@ -74,6 +74,9 @@ export function CarGallery({ photos, alt }: { photos: { id: string; url: string 
           >
             <ChevronRight className="size-6 rtl:rotate-180" />
           </button>
+          {photos[open].credit && (
+            <p className="absolute start-6 bottom-6 text-xs text-snow/60">{photos[open].credit}</p>
+          )}
           <div className="absolute bottom-6 flex gap-2">
             {photos.map((p, i) => (
               <button
