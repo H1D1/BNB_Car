@@ -65,16 +65,18 @@ export function LocationInput({
   const wrap = useRef<HTMLDivElement>(null);
   const typedRef = useRef(false);
 
-  useEffect(() => setText(defaultLabel), [defaultLabel]);
+  // Re-sync when the parent passes a new label (render-phase update, no effect needed).
+  const [prevDefault, setPrevDefault] = useState(defaultLabel);
+  if (defaultLabel !== prevDefault) {
+    setPrevDefault(defaultLabel);
+    setText(defaultLabel);
+  }
 
   // Debounced Mapbox lookup — only after the user actually typed.
   useEffect(() => {
     if (!typedRef.current) return;
     const q = text.trim();
-    if (q.length < 2) {
-      setGeo([]);
-      return;
-    }
+    if (q.length < 2) return;
     const ctrl = new AbortController();
     const timer = setTimeout(async () => {
       setLoading(true);
@@ -111,7 +113,7 @@ export function LocationInput({
         label: placeName(p, locale) + (p.iata ? ` (${p.iata})` : ""),
         sub: p.kind === "city" ? t("search.cities") : p.kind === "airport" ? t("search.airports") : t("search.stations"),
       }));
-    const remote = geo.map<Option>((r) => ({ key: `g:${r.id}`, kind: "geo", result: r, label: r.name, sub: r.fullAddress }));
+    const remote = (q.length >= 2 ? geo : []).map<Option>((r) => ({ key: `g:${r.id}`, kind: "geo", result: r, label: r.name, sub: r.fullAddress }));
     return [...local, ...remote];
   }, [text, places, geo, locale, t]);
 

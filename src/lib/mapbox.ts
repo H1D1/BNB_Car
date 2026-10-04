@@ -32,6 +32,9 @@ type V6Feature = {
 };
 
 const BASE = "https://api.mapbox.com/search/geocode/v6";
+// Geocoding v6 rejects the whole request on an unknown type (e.g. "poi"), so filter defensively.
+// POI coverage for Morocco is thin in Mapbox; addresses, streets and neighbourhoods are reliable.
+const V6_TYPES = new Set(["country", "region", "postcode", "district", "place", "locality", "neighborhood", "street", "block", "address", "secondary_address"]);
 const lang = (l: Locale) => (l === "ar" ? "ar" : l === "en" ? "en" : "fr");
 
 function toResult(f: V6Feature): GeoResult {
@@ -63,7 +66,8 @@ export async function geocode(
     limit: "6",
     access_token: MAPBOX_TOKEN,
   });
-  if (opts.types) params.set("types", opts.types);
+  const types = opts.types?.split(",").map((t) => t.trim()).filter((t) => V6_TYPES.has(t)).join(",");
+  if (types) params.set("types", types);
   if (opts.proximity) params.set("proximity", `${opts.proximity.lng},${opts.proximity.lat}`);
   const res = await fetch(`${BASE}/forward?${params}`, { signal: opts.signal });
   if (!res.ok) return [];

@@ -64,14 +64,28 @@ const NEIGHBORHOODS = {
   ouarzazate: ['Centre', 'Tabounte'],
 };
 
+// Curated so listings look plausible: everyday hatchbacks for city cars, no supercars on a Dacia.
 const PHOTOS = {
-  city: ['1549317661-bd32c8ce0db2', '1541899481282-d53bffe3c35d', '1580273916550-e323be2ae537', '1502877338535-766e1452684a', '1489824904134-891ab64532f1', '1517524008697-84bbe3c3fd98'],
-  compact: ['1494976388531-d1058494cdd8', '1552519507-da3b142c6e3d', '1609521263047-f8f205293f24', '1525609004556-c46c7d6cf023', '1493238792000-8113da705763'],
-  sedan: ['1583121274602-3e2820c69888', '1555215695-3004980ad54e', '1618843479313-40f8afb4b4d8', '1542362567-b07e54358753', '1554744512-d6c603f27c54'],
-  suv: ['1533473359331-0135ef1b58bf', '1606664515524-ed2f786a0bd6', '1519641471654-76ce0107ad1b', '1568605117036-5fe5e7bab0b7', '1606016159991-dfe4f2746ad5', '1626668893632-6f3a4466d22f'],
-  luxury: ['1503376780353-7e6692767b70', '1617814076367-b759c7d7e738', '1619767886558-efdc259cde1a', '1563720223185-11003d516935', '1612825173281-9a193378527e', '1617469767053-d3b523a0b982'],
-  van: ['1621007947382-bb3c3994e3fb', '1590362891991-f776e747a588', '1580414057403-c5f451f30e1c'],
-  interior: ['1514316454349-750a7fd3da3a', '1503736334956-4c8f8e92946d', '1511919884226-fd3cad34687c', '1520031441872-265e4ff70366'],
+  city: ['1541899481282-d53bffe3c35d', '1471444928139-48c5bf5173f8', '1549317661-bd32c8ce0db2'],
+  compact: ['1471444928139-48c5bf5173f8', '1541899481282-d53bffe3c35d', '1609521263047-f8f205293f24'],
+  sedan: ['1619767886558-efdc259cde1a', '1621007947382-bb3c3994e3fb', '1606016159991-dfe4f2746ad5'],
+  suv: ['1617469767053-d3b523a0b982', '1519641471654-76ce0107ad1b', '1533473359331-0135ef1b58bf', '1517524008697-84bbe3c3fd98', '1609521263047-f8f205293f24'],
+  luxury: ['1590362891991-f776e747a588', '1563720223185-11003d516935', '1555215695-3004980ad54e', '1606664515524-ed2f786a0bd6', '1514316454349-750a7fd3da3a'],
+  van: ['1533473359331-0135ef1b58bf', '1519641471654-76ce0107ad1b', '1617469767053-d3b523a0b982'],
+};
+// Closer matches for specific models.
+const MODEL_PHOTOS = {
+  'Hyundai Accent': '1619767886558-efdc259cde1a',
+  'Toyota Corolla': '1621007947382-bb3c3994e3fb',
+  'Range Rover Evoque': '1563720223185-11003d516935',
+  'Fiat 500': '1549317661-bd32c8ce0db2',
+  'Volkswagen Golf 8': '1471444928139-48c5bf5173f8',
+  'Mercedes-Benz Classe C': '1514316454349-750a7fd3da3a',
+  'Mercedes-Benz Classe E': '1590362891991-f776e747a588',
+  'BMW X5': '1555215695-3004980ad54e',
+  'Toyota Land Cruiser Prado': '1533473359331-0135ef1b58bf',
+  'Kia Sportage': '1617469767053-d3b523a0b982',
+  'Hyundai Tucson': '1519641471654-76ce0107ad1b',
 };
 const img = (id, w = 1400) => `https://images.unsplash.com/photo-${id}?auto=format&fit=crop&w=${w}&q=75`;
 
@@ -265,12 +279,10 @@ async function main() {
       ],
     );
     const carId = rows[0].id;
-    const photos = [pick(PHOTOS[category]), pick(PHOTOS[category]), pick(PHOTOS.interior)];
-    const uniq = [...new Set(photos)];
+    const lead = MODEL_PHOTOS[`${make} ${model}`] ?? pick(PHOTOS[category]);
+    const uniq = [...new Set([lead, ...PHOTOS[category]])].slice(0, 3);
     for (const [pos, id] of uniq.entries()) {
-      await db.query('insert into public.car_photos (car_id, url, kind, position) values ($1,$2,$3,$4)', [
-        carId, img(id), pos === uniq.length - 1 && id.startsWith('15') && PHOTOS.interior.includes(id) ? 'interior' : 'exterior', pos,
-      ]);
+      await db.query('insert into public.car_photos (car_id, url, kind, position) values ($1,$2,$3,$4)', [carId, img(id), 'exterior', pos]);
     }
     await db.query('update public.cars set cover_url = $2 where id = $1', [carId, img(uniq[0], 900)]);
     if (rnd() > 0.5) {
