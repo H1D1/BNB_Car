@@ -14,6 +14,7 @@ import { Button } from "../ui/Button";
 import { Price } from "../ui/Price";
 import { LocationInput } from "../ui/LocationInput";
 import { Alert } from "../ui/primitives";
+import { DateRangePicker } from "../ui/DateRangePicker";
 
 type CarForWidget = Pick<
   Car,
@@ -37,12 +38,14 @@ export function BookingWidget({
   initial,
   loggedIn,
   isOwner,
+  busy = [],
 }: {
   car: CarForWidget;
   airports: Place[];
   initial: { start?: string; end?: string; airport?: string; address?: string; alat?: number; alng?: number };
   loggedIn: boolean;
   isOwner: boolean;
+  busy?: { start_at: string; end_at: string }[];
 }) {
   const { t, locale } = useI18n();
   const router = useRouter();
@@ -164,31 +167,20 @@ export function BookingWidget({
         </div>
       )}
 
-      <div className="mt-4 grid grid-cols-2 gap-2">
-        <label className="glass-subtle rounded-2xl px-3 py-2">
-          <span className="block text-[11px] font-bold tracking-wider text-white/50 uppercase">{t("booking.pickup")}</span>
-          <input
-            type="datetime-local"
-            value={start}
-            step={1800}
-            onChange={(e) => {
-              setStart(e.target.value);
-              if (e.target.value >= end) setEnd(addHoursLocal(e.target.value, type === "hourly" ? 3 : 24));
-            }}
-            className="w-full bg-transparent text-sm font-semibold outline-none [color-scheme:dark]"
-          />
-        </label>
-        <label className="glass-subtle rounded-2xl px-3 py-2">
-          <span className="block text-[11px] font-bold tracking-wider text-white/50 uppercase">{t("booking.return")}</span>
-          <input
-            type="datetime-local"
-            value={end}
-            min={start}
-            step={1800}
-            onChange={(e) => setEnd(e.target.value)}
-            className="w-full bg-transparent text-sm font-semibold outline-none [color-scheme:dark]"
-          />
-        </label>
+      <div className="mt-4">
+        <DateRangePicker
+          variant="stack"
+          months={2}
+          align="end"
+          start={start}
+          end={end}
+          sameDay={type === "hourly"}
+          busy={busy}
+          onChange={(s, e) => {
+            setStart(s);
+            setEnd(e);
+          }}
+        />
       </div>
 
       {(car.delivery_available || car.airport_slugs.length > 0) && (

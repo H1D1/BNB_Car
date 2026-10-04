@@ -49,7 +49,7 @@ export default async function CarPage(props: PageProps<"/cars/[id]">) {
   const sp = await props.searchParams;
   const [{ t, locale }, data, places, user] = await Promise.all([getI18n(), getCar(id), getPlaces(), getUser()]);
   if (!data) notFound();
-  const { car, photos, host, reviews, seasonal } = data;
+  const { car, photos, host, reviews, seasonal, busy } = data;
   const favorites = await getFavoriteIds(user?.id);
   const similar = (await searchCars({ place: car.city_slug, sort: "recommended" })).filter((c) => c.id !== car.id).slice(0, 3);
 
@@ -312,6 +312,7 @@ export default async function CarPage(props: PageProps<"/cars/[id]">) {
             airports={airports}
             loggedIn={!!user}
             isOwner={isOwner}
+            busy={busy}
             initial={{
               start: str("start"),
               end: str("end"),

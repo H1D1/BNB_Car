@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useTransition } from "react";
+import { useState, useSyncExternalStore, useTransition } from "react";
+import { createPortal } from "react-dom";
 import {
   Car,
   ChevronDown,
@@ -43,6 +44,11 @@ export function HeaderControls({
   const { t, locale, currency } = useI18n();
   const [pending, start] = useTransition();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const mounted = useSyncExternalStore(
+    () => () => {},
+    () => true,
+    () => false,
+  );
 
   const prefs = (
     <div className="space-y-3 p-1">
@@ -193,7 +199,9 @@ export function HeaderControls({
         <Menu className="size-5" />
       </button>
 
-      {/* Mobile sheet */}
+      {/* Mobile sheet — portalled so the header's backdrop-filter doesn't trap it */}
+      {mounted &&
+        createPortal(
       <div
         className={cn("fixed inset-0 z-50 transition md:hidden", mobileOpen ? "visible" : "invisible")}
         onClick={(e) => (e.target as HTMLElement).closest("a") && setMobileOpen(false)}
@@ -262,7 +270,9 @@ export function HeaderControls({
             )}
           </div>
         </div>
-      </div>
+      </div>,
+          document.body,
+        )}
     </>
   );
 }

@@ -1,11 +1,12 @@
 "use client";
 
 import { useState } from "react";
-import { CalendarDays, MapPin, Search } from "lucide-react";
+import { MapPin, Search } from "lucide-react";
 import { useI18n } from "@/lib/i18n/client";
 import { cn, defaultDates, placeName } from "@/lib/utils";
 import type { Place } from "@/lib/types";
 import { LocationInput, type LocationSelection } from "../ui/LocationInput";
+import { DateRangePicker } from "../ui/DateRangePicker";
 
 type Initial = { place?: string; start?: string; end?: string; lat?: number; lng?: number; label?: string };
 
@@ -75,35 +76,16 @@ export function SearchBar({
         />
       </div>
       <div className="hidden w-px self-stretch bg-white/10 md:block" />
-      <label className={cell}>
-        <span className="flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-white/50 uppercase">
-          <CalendarDays className="size-3.5" />
-          {t("home.pickup")}
-        </span>
-        <input
-          type="datetime-local"
-          name="start"
-          value={start}
-          step={1800}
-          onChange={(e) => {
-            setStart(e.target.value);
-            if (e.target.value >= end) {
-              const d = new Date(e.target.value + ":00Z");
-              d.setUTCDate(d.getUTCDate() + 1);
-              setEnd(d.toISOString().slice(0, 16));
-            }
-          }}
-          className={input}
-        />
-      </label>
-      <div className="hidden w-px self-stretch bg-white/10 md:block" />
-      <label className={cell}>
-        <span className="flex items-center gap-1.5 text-[11px] font-bold tracking-wider text-white/50 uppercase">
-          <CalendarDays className="size-3.5" />
-          {t("home.return")}
-        </span>
-        <input type="datetime-local" name="end" value={end} min={start} step={1800} onChange={(e) => setEnd(e.target.value)} className={input} />
-      </label>
+      <DateRangePicker
+        start={start}
+        end={end}
+        onChange={(s, e) => {
+          setStart(s);
+          setEnd(e);
+        }}
+        names={{ start: "start", end: "end" }}
+        align="center"
+      />
       <button
         type="submit"
         className="mt-1 flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-saffron-400 to-terracotta-400 px-7 font-bold text-ink-950 shadow-[0_8px_24px_-6px_rgba(226,114,91,0.7)] transition hover:brightness-110 active:scale-[0.98] md:mt-0 md:h-auto md:rounded-full"

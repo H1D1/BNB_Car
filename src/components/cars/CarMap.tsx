@@ -7,24 +7,24 @@ import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-lea
 import { useRouter } from "next/navigation";
 import { formatMAD } from "@/lib/currency";
 import { useI18n } from "@/lib/i18n/client";
-import { MAPBOX_ATTRIBUTION, mapboxTiles } from "@/lib/mapbox";
-import { useTheme } from "@/lib/theme";
+import { MAPBOX_ATTRIBUTION, MAPBOX_TILES } from "@/lib/mapbox";
 
 type Pin = { id: string; lat: number; lng: number; price?: number; label?: string };
 
 const MOROCCO_CENTER: [number, number] = [31.8, -7.1];
 
+// Airbnb-style price pills: white with dark text; hovered/active flips to dark.
 function priceIcon(text: string, active: boolean) {
   return L.divIcon({
     className: "price-pin",
-    html: `<div style="transform:translate(-50%,-100%);display:inline-block;white-space:nowrap;padding:5px 10px;border-radius:999px;font:700 12px/1 var(--font-sans);color:${active ? "#050816" : "#fff"};background:${active ? "linear-gradient(135deg,#ffe08a,#ec8b6f)" : "rgba(18,26,69,.88)"};border:1px solid rgba(255,255,255,.35);box-shadow:0 6px 18px rgba(0,0,0,.45);backdrop-filter:blur(8px);transition:all .2s">${text}</div>`,
+    html: `<div style="transform:translate(-50%,-50%) scale(${active ? 1.08 : 1});display:inline-block;white-space:nowrap;padding:6px 11px;border-radius:999px;font:700 13px/1 var(--font-sans);letter-spacing:.01em;color:${active ? "#fff" : "#151a3d"};background:${active ? "#151a3d" : "#fff"};box-shadow:0 0 0 1px rgba(0,0,0,.06),0 2px 6px rgba(0,0,0,.18),0 6px 16px rgba(0,0,0,.12);transition:transform .2s cubic-bezier(.22,1,.36,1),background .2s,color .2s">${text}</div>`,
     iconSize: [0, 0],
   });
 }
 
 const dotIcon = L.divIcon({
   className: "price-pin",
-  html: `<div style="transform:translate(-50%,-50%);width:22px;height:22px;border-radius:999px;background:radial-gradient(circle,#f4c430 35%,rgba(244,196,48,.25) 36%);box-shadow:0 0 0 6px rgba(244,196,48,.15)"></div>`,
+  html: `<div style="transform:translate(-50%,-50%);width:44px;height:44px;border-radius:999px;background:rgba(96,80,220,.18);display:grid;place-items:center"><div style="width:18px;height:18px;border-radius:999px;background:#6050dc;border:3px solid #fff;box-shadow:0 2px 8px rgba(0,0,0,.3)"></div></div>`,
   iconSize: [0, 0],
 });
 
@@ -63,7 +63,6 @@ export default function CarMap({
 }) {
   const router = useRouter();
   const { locale } = useI18n();
-  const theme = useTheme();
   const stable = useMemo(() => pins, [pins]);
 
   return (
@@ -74,7 +73,7 @@ export default function CarMap({
       className="h-full w-full"
       attributionControl
     >
-      <TileLayer key={theme} attribution={MAPBOX_ATTRIBUTION} url={mapboxTiles(theme)} tileSize={512} zoomOffset={-1} maxZoom={19} />
+      <TileLayer attribution={MAPBOX_ATTRIBUTION} url={MAPBOX_TILES} tileSize={512} zoomOffset={-1} maxZoom={19} />
       {!picker && <FitBounds pins={stable} />}
       {picker && onPick && <ClickToPick onPick={onPick} />}
       {stable.map((p) => (

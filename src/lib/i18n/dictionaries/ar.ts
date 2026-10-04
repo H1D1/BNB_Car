@@ -152,6 +152,17 @@ export const ar: Dict = {
     resultsNear: "{count} سيارة قرب {place}",
     awayKm: "على بعد {km} كلم",
   },
+  datePicker: {
+    title: "اختر التواريخ",
+    prev: "الشهر السابق",
+    next: "الشهر التالي",
+    selectPickup: "اختر تاريخ الاستلام",
+    selectReturn: "اختر تاريخ الإرجاع",
+    pickupTime: "وقت الاستلام",
+    returnTime: "وقت الإرجاع",
+    days: "{count} يوم/أيام",
+    done: "تم",
+  },
   location: {
     useMine: "استخدم موقعي الحالي",
     locating: "جارٍ تحديد موقعك…",

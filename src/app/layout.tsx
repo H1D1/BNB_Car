@@ -7,6 +7,7 @@ import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LiquidPointer } from "@/components/ui/LiquidPointer";
 import { themeInitScript } from "@/lib/theme-shared";
+import { InlineScript } from "@/components/ui/InlineScript";
 
 // Century Gothic is used when installed; Questrial is the closest open geometric fallback.
 const geo = Questrial({ weight: "400", subsets: ["latin"], variable: "--font-geo", display: "swap" });
@@ -36,7 +37,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     // The theme class is applied by the inline script (and ThemeToggle), never by React.
     <html lang={locale} dir={dir} className={`${geo.variable} ${tajawal.variable} antialiased`} suppressHydrationWarning>
       <head>
-        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+        <InlineScript html={themeInitScript} />
       </head>
       <body className="flex min-h-dvh flex-col">
         <div className="atmosphere" aria-hidden>

@@ -152,6 +152,17 @@ export const fr: Dict = {
     resultsNear: "{count} voitures près de {place}",
     awayKm: "à {km} km",
   },
+  datePicker: {
+    title: "Choisissez vos dates",
+    prev: "Mois précédent",
+    next: "Mois suivant",
+    selectPickup: "Choisissez la date de prise en charge",
+    selectReturn: "Choisissez la date de restitution",
+    pickupTime: "Heure de prise en charge",
+    returnTime: "Heure de restitution",
+    days: "{count} jour(s)",
+    done: "Valider",
+  },
   location: {
     useMine: "Utiliser ma position actuelle",
     locating: "Localisation en cours…",

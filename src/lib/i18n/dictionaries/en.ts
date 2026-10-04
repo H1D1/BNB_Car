@@ -150,6 +150,17 @@ export const en = {
     resultsNear: "{count} cars near {place}",
     awayKm: "{km} km away",
   },
+  datePicker: {
+    title: "Choose your dates",
+    prev: "Previous month",
+    next: "Next month",
+    selectPickup: "Select a pick-up date",
+    selectReturn: "Select a return date",
+    pickupTime: "Pick-up time",
+    returnTime: "Return time",
+    days: "{count} day(s)",
+    done: "Done",
+  },
   location: {
     useMine: "Use my current location",
     locating: "Locating you…",

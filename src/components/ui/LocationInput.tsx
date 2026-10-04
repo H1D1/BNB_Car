@@ -5,6 +5,7 @@ import { Building2, Crosshair, Loader2, MapPin, Plane, TrainFront } from "lucide
 import { useI18n } from "@/lib/i18n/client";
 import { geocode, reverseGeocode, type GeoResult } from "@/lib/mapbox";
 import { cn, placeName } from "@/lib/utils";
+import { Floating } from "./Floating";
 import type { Place } from "@/lib/types";
 
 export type LocationSelection =
@@ -63,6 +64,7 @@ export function LocationInput({
   const [locating, setLocating] = useState(false);
   const [geoError, setGeoError] = useState<string | null>(null);
   const wrap = useRef<HTMLDivElement>(null);
+  const panel = useRef<HTMLDivElement>(null);
   const typedRef = useRef(false);
 
   // Re-sync when the parent passes a new label (render-phase update, no effect needed).
@@ -96,7 +98,10 @@ export function LocationInput({
 
   useEffect(() => {
     if (!open) return;
-    const onDown = (e: MouseEvent) => !wrap.current?.contains(e.target as Node) && setOpen(false);
+    const onDown = (e: MouseEvent) => {
+      const t = e.target as Node;
+      if (!wrap.current?.contains(t) && !panel.current?.contains(t)) setOpen(false);
+    };
     document.addEventListener("mousedown", onDown);
     return () => document.removeEventListener("mousedown", onDown);
   }, [open]);
@@ -188,12 +193,18 @@ export function LocationInput({
       />
       {(loading || locating) && <Loader2 className="absolute end-3 top-1/2 size-4 -translate-y-1/2 animate-spin text-white/50" />}
 
-      {open && (
-        <div
-          id={listId}
-          role="listbox"
-          className="glass-menu absolute inset-x-0 top-full z-50 mt-2 max-h-96 min-w-72 overflow-y-auto rounded-2xl p-1.5"
-        >
+      <Floating
+        ref={panel}
+        anchor={wrap}
+        open={open}
+        matchWidth
+        minWidth={340}
+        offset={14}
+        id={listId}
+        role="listbox"
+        className="max-h-96 overflow-y-auto rounded-2xl p-1.5 animate-fade-up"
+        style={{ animationDuration: "0.3s" }}
+      >
           {showMyLocation && (
             <button
               type="button"
@@ -238,8 +249,7 @@ export function LocationInput({
             <p className="px-3 py-3 text-sm text-white/50">{t("location.noResults")}</p>
           )}
           {geo.length > 0 && <p className="px-3 pt-1 pb-1.5 text-[10px] text-white/30">© Mapbox</p>}
-        </div>
-      )}
+      </Floating>
     </div>
   );
 }
