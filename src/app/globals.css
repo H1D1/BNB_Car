@@ -1,0 +1,272 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   CarShare Morocco — Liquid Glass design tokens
+   Majorelle indigo night sky, terracotta dusk, saffron accents.
+--------------------------------------------------------------------------- */
+@theme {
+  --font-sans: "Century Gothic", CenturyGothic, "URW Gothic", AppleGothic, var(--font-geo), ui-sans-serif, system-ui, sans-serif;
+  --font-arabic: var(--font-tajawal), "Century Gothic", sans-serif;
+
+  --color-ink-950: #050816;
+  --color-ink-900: #0a0f2c;
+  --color-ink-800: #121a45;
+  --color-majorelle-300: #a9a3ff;
+  --color-majorelle-400: #8479f2;
+  --color-majorelle-500: #6050dc;
+  --color-majorelle-600: #4c3cc4;
+  --color-terracotta-300: #f5ad97;
+  --color-terracotta-400: #ec8b6f;
+  --color-terracotta-500: #e2725b;
+  --color-terracotta-600: #c95a43;
+  --color-saffron-300: #ffe08a;
+  --color-saffron-400: #f7cf55;
+  --color-saffron-500: #f4c430;
+  --color-mint-400: #5fd3a2;
+  --color-mint-500: #34b885;
+  --color-rose-400: #fb7185;
+
+  --radius-glass: 1.25rem;
+  --shadow-glass: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+  --shadow-glass-lg: 0 24px 64px -12px rgba(8, 10, 40, 0.65), 0 8px 32px 0 rgba(31, 38, 135, 0.3);
+  --ease-liquid: cubic-bezier(0.22, 1, 0.36, 1);
+
+  --animate-float: float 14s ease-in-out infinite;
+  --animate-fade-up: fade-up 0.6s var(--ease-liquid) both;
+  --animate-shimmer: shimmer 1.6s linear infinite;
+
+  @keyframes float {
+    0%, 100% { transform: translate3d(0, 0, 0) scale(1); }
+    50% { transform: translate3d(2%, -3%, 0) scale(1.06); }
+  }
+  @keyframes fade-up {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes shimmer {
+    from { background-position: -200% 0; }
+    to { background-position: 200% 0; }
+  }
+}
+
+:root {
+  color-scheme: dark;
+  --glass-bg: rgba(255, 255, 255, 0.07);
+  --glass-bg-strong: rgba(255, 255, 255, 0.12);
+  --glass-border: rgba(255, 255, 255, 0.16);
+  --glass-highlight: rgba(255, 255, 255, 0.35);
+}
+
+html {
+  background: var(--color-ink-950);
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  font-family: var(--font-sans);
+  color: #eef0ff;
+  min-height: 100dvh;
+  letter-spacing: 0.005em;
+}
+
+html[lang="ar"] body {
+  font-family: var(--font-arabic);
+  letter-spacing: 0;
+}
+
+/* Atmospheric backdrop: fixed gradient + slow liquid blobs + zellige texture. */
+.atmosphere {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 700px at 85% -10%, rgba(96, 80, 220, 0.45), transparent 60%),
+    radial-gradient(900px 600px at -10% 110%, rgba(226, 114, 91, 0.35), transparent 60%),
+    linear-gradient(160deg, #0a0f2c 0%, #070b22 45%, #120b26 100%);
+}
+.atmosphere .blob {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  opacity: 0.5;
+  animation: var(--animate-float);
+  will-change: transform;
+}
+.atmosphere .zellige {
+  position: absolute;
+  inset: 0;
+  opacity: 0.05;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72' viewBox='0 0 72 72'%3E%3Cg fill='none' stroke='%23fff' stroke-width='1'%3E%3Cpath d='M36 4l9 23 23 9-23 9-9 23-9-23-23-9 23-9z'/%3E%3Ccircle cx='36' cy='36' r='8'/%3E%3Cpath d='M0 0l14 14M72 0L58 14M0 72l14-14M72 72L58 58'/%3E%3C/g%3E%3C/svg%3E");
+  mask-image: radial-gradient(ellipse at center, black 30%, transparent 75%);
+}
+
+/* ---------------------------------------------------------------------------
+   Glass surfaces
+--------------------------------------------------------------------------- */
+@utility glass {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.04));
+  border: 1px solid var(--glass-border);
+  box-shadow: var(--shadow-glass), inset 0 1px 0 0 rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+}
+
+@utility glass-strong {
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.07));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: var(--shadow-glass-lg), inset 0 1px 0 0 rgba(255, 255, 255, 0.18);
+  backdrop-filter: blur(22px) saturate(160%);
+  -webkit-backdrop-filter: blur(22px) saturate(160%);
+}
+
+@utility glass-subtle {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Liquid hover: light sweeps across the surface following the pointer (--mx/--my set in JS, defaults centre). */
+@utility liquid {
+  position: relative;
+  isolation: isolate;
+  transition: transform 0.45s var(--ease-liquid), box-shadow 0.45s var(--ease-liquid), border-color 0.3s;
+  &::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    z-index: -1;
+    opacity: 0;
+    background: radial-gradient(420px circle at var(--mx, 50%) var(--my, 0%), rgba(255, 255, 255, 0.14), transparent 45%);
+    transition: opacity 0.4s var(--ease-liquid);
+    pointer-events: none;
+  }
+  &:hover {
+    transform: translateY(-3px);
+    border-color: rgba(255, 255, 255, 0.28);
+  }
+  &:hover::before {
+    opacity: 1;
+  }
+}
+
+@utility text-gradient {
+  background: linear-gradient(100deg, #fff 10%, var(--color-saffron-300) 50%, var(--color-terracotta-300) 90%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+@utility skeleton {
+  background: linear-gradient(90deg, rgba(255, 255, 255, 0.04) 25%, rgba(255, 255, 255, 0.1) 50%, rgba(255, 255, 255, 0.04) 75%);
+  background-size: 200% 100%;
+  animation: var(--animate-shimmer);
+}
+
+@utility scrollbar-none {
+  scrollbar-width: none;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Form controls */
+@layer components {
+  .field {
+    @apply w-full rounded-xl px-4 py-3 text-[15px] text-white placeholder:text-white/40 outline-none transition;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.14);
+  }
+  .field:focus {
+    border-color: var(--color-majorelle-400);
+    box-shadow: 0 0 0 4px rgba(132, 121, 242, 0.2);
+    background: rgba(255, 255, 255, 0.09);
+  }
+  .field[aria-invalid="true"] {
+    border-color: var(--color-rose-400);
+  }
+  select.field {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' fill='none'%3E%3Cpath d='M1 1.5l5 5 5-5' stroke='%23ffffff99' stroke-width='1.6' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 1rem center;
+    padding-inline-end: 2.5rem;
+  }
+  html[dir="rtl"] select.field {
+    background-position: left 1rem center;
+  }
+  select.field option {
+    background: var(--color-ink-900);
+    color: white;
+  }
+  .field::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.6;
+    cursor: pointer;
+  }
+  .label {
+    @apply mb-1.5 block text-xs font-semibold uppercase tracking-wider text-white/60;
+  }
+}
+
+/* Leaflet theming */
+.leaflet-container {
+  background: #0d1336 !important;
+  font-family: var(--font-sans) !important;
+  border-radius: inherit;
+}
+.leaflet-control-attribution {
+  background: rgba(10, 15, 44, 0.7) !important;
+  color: rgba(255, 255, 255, 0.5) !important;
+}
+.leaflet-control-attribution a {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+.leaflet-popup-content-wrapper,
+.leaflet-popup-tip {
+  background: rgba(16, 20, 54, 0.92) !important;
+  color: white !important;
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+}
+.leaflet-control-zoom a {
+  background: rgba(16, 20, 54, 0.85) !important;
+  color: white !important;
+  border-color: rgba(255, 255, 255, 0.15) !important;
+}
+.price-pin {
+  background: none !important;
+  border: none !important;
+}
+
+/* Accessibility & performance fallbacks */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .glass, .glass-strong {
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    background: rgba(18, 26, 69, 0.96);
+  }
+}
+/* Low-end mobile: cheaper blur. */
+@media (max-width: 640px) {
+  .glass, .glass-strong {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
+  .atmosphere .blob {
+    animation: none;
+  }
+}
+
+@media print {
+  .atmosphere, .no-print { display: none !important; }
+  html, body { background: white !important; color: black !important; }
+  .print-plain { background: white !important; color: black !important; border: none !important; box-shadow: none !important; backdrop-filter: none !important; }
+  .print-plain * { color: black !important; border-color: #ccc !important; }
+}
