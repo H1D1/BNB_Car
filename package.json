@@ -9,7 +9,8 @@
     "lint": "eslint",
     "db:migrate": "node scripts/migrate.mjs",
     "db:seed": "node scripts/seed.mjs",
-    "db:import-avito": "node scripts/import-avito.mjs"
+    "db:import-avito": "node scripts/import-avito.mjs",
+    "render:route": "node scripts/render-route.mjs"
   },
   "dependencies": {
     "@remotion/google-fonts": "^4.0.532",

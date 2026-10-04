@@ -60,6 +60,7 @@ export function RouteJourney({ locale, token, counts, names }: RouteJourneyProps
     });
     map.current = m;
     m.on("load", () => {
+      m.resize();
       prepareStoryStyle(m, locale);
       const firstSymbol = m.getStyle().layers?.find((l) => l.type === "symbol")?.id;
       const line = { type: "Feature" as const, properties: {}, geometry: { type: "LineString" as const, coordinates: ROUTE.coords } };
@@ -81,6 +82,8 @@ export function RouteJourney({ locale, token, counts, names }: RouteJourneyProps
     const m = map.current;
     if (!m || !ready) return;
     const handle = delayRender(`frame ${frame}`, { timeoutInMilliseconds: 60_000 });
+    // the container may have been sized after the map was created: keep the viewport in sync
+    m.resize();
     const cam = cameraAt(s, false);
     m.jumpTo({ center: cam.center, zoom: cam.zoom, pitch: cam.pitch, bearing: 0, padding: { top: 40, bottom: 40, left: rtl ? 640 : 60, right: rtl ? 60 : 640 } });
     // show [0, f] of the line: trim everything after the car

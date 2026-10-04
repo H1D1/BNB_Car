@@ -6,20 +6,13 @@ import { createClient } from "@/lib/supabase/server";
 import { placeName } from "@/lib/utils";
 import { Hero } from "@/components/landing/Hero";
 import { CarMarquee } from "@/components/landing/CarMarquee";
+import { RouteFilm } from "@/components/landing/RouteFilm";
 import { ShowcasePlayer } from "@/components/landing/ShowcasePlayer";
 import { HostBanner } from "@/components/landing/HostBanner";
 import { CategoryIcon } from "@/components/landing/CategoryIcon";
 import { Glass } from "@/components/ui/primitives";
 import type { CarCategory } from "@/lib/types";
 
-
-async function getCityCounts() {
-  const supabase = await createClient();
-  const { data } = await supabase.from("cars").select("city_slug").eq("status", "active");
-  const perCity: Record<string, number> = {};
-  for (const c of data ?? []) perCity[c.city_slug] = (perCity[c.city_slug] ?? 0) + 1;
-  return perCity;
-}
 
 async function getHostName(id: string | undefined) {
   if (!id) return "Youssef";
@@ -29,7 +22,7 @@ async function getHostName(id: string | undefined) {
 }
 
 export default async function Home() {
-  const [{ t, locale }, places, perCity, featured] = await Promise.all([getI18n(), getPlaces(), getCityCounts(), searchCars({ sort: "rating" })]);
+  const [{ t, locale }, places, featured] = await Promise.all([getI18n(), getPlaces(), searchCars({ sort: "rating" })]);
   const cityName = Object.fromEntries(places.map((p) => [p.slug, placeName(p, locale)]));
   const showcaseCars = featured.filter((c) => c.city_slug === "casablanca").slice(0, 3);
   const showcaseHost = await getHostName(showcaseCars[0]?.host_id);
@@ -52,6 +45,8 @@ export default async function Home() {
         </div>
         <CarMarquee cars={featured.slice(0, 14)} cityName={cityName} perDay={t("common.perDay")} />
       </section>
+
+      <RouteFilm />
 
       <ShowcasePlayer
         cars={showcaseCars.map(({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }) => ({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }))}
