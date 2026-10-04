@@ -6,8 +6,7 @@ import { createClient } from "@/lib/supabase/server";
 import { placeName } from "@/lib/utils";
 import { Hero } from "@/components/landing/Hero";
 import { CarMarquee } from "@/components/landing/CarMarquee";
-import { RouteMap } from "@/components/landing/RouteMap";
-import { HowItWorks } from "@/components/landing/HowItWorks";
+import { ShowcasePlayer } from "@/components/landing/ShowcasePlayer";
 import { HostBanner } from "@/components/landing/HostBanner";
 import { Glass } from "@/components/ui/primitives";
 import type { CarCategory } from "@/lib/types";
@@ -22,9 +21,18 @@ async function getCityCounts() {
   return perCity;
 }
 
+async function getHostName(id: string | undefined) {
+  if (!id) return "Youssef";
+  const supabase = await createClient();
+  const { data } = await supabase.from("profiles").select("full_name").eq("id", id).maybeSingle();
+  return data?.full_name ?? "Youssef";
+}
+
 export default async function Home() {
   const [{ t, locale }, places, perCity, featured] = await Promise.all([getI18n(), getPlaces(), getCityCounts(), searchCars({ sort: "rating" })]);
   const cityName = Object.fromEntries(places.map((p) => [p.slug, placeName(p, locale)]));
+  const showcaseCars = featured.filter((c) => c.city_slug === "casablanca").slice(0, 3);
+  const showcaseHost = await getHostName(showcaseCars[0]?.host_id);
   const airports = places.filter((p) => p.kind === "airport" && p.popular);
   const categories: CarCategory[] = ["city", "compact", "suv", "sedan", "luxury", "van"];
 
@@ -45,9 +53,11 @@ export default async function Home() {
         <CarMarquee cars={featured.slice(0, 14)} cityName={cityName} perDay={t("common.perDay")} />
       </section>
 
-      <RouteMap places={places} counts={perCity} />
-
-      <HowItWorks />
+      <ShowcasePlayer
+        cars={showcaseCars.map(({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }) => ({ id, make, model, year, cover_url, daily_price_mad, rating, review_count }))}
+        city={cityName.casablanca ?? "Casablanca"}
+        hostName={showcaseHost}
+      />
 
       {/* Categories */}
       <section className="mx-auto max-w-7xl px-4 py-16 md:px-6" aria-labelledby="cat-title">

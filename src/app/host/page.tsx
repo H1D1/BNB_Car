@@ -206,7 +206,7 @@ export default async function HostDashboard() {
                 <li key={b.id}>
                   <Link href={`/trips/${b.id}`} className="block">
                     <Glass liquid className="p-4">
-                      <BookingRow b={b} locale={locale} showStatus statusLabel={t(`trips.status.${b.status}`)} />
+                      <BookingRow b={b} locale={locale} showStatus statusLabel={t(`trips.status.${b.status}`)} linked={false} />
                     </Glass>
                   </Link>
                 </li>
@@ -276,11 +276,14 @@ function BookingRow({
   locale,
   showStatus,
   statusLabel,
+  linked = true,
 }: {
   b: HostBooking;
   locale: Parameters<typeof formatDateTime>[1];
   showStatus?: boolean;
   statusLabel?: string;
+  /** false when the whole row is already wrapped in a link (no nested <a>) */
+  linked?: boolean;
 }) {
   return (
     <div className="flex items-start gap-3">
@@ -289,9 +292,13 @@ function BookingRow({
       </div>
       <div className="min-w-0 flex-1">
         <div className="flex items-start justify-between gap-2">
-          <Link href={`/trips/${b.id}`} className="truncate font-semibold hover:underline">
-            {b.car ? `${b.car.make} ${b.car.model}` : b.reference}
-          </Link>
+          {linked ? (
+            <Link href={`/trips/${b.id}`} className="truncate font-semibold hover:underline">
+              {b.car ? `${b.car.make} ${b.car.model}` : b.reference}
+            </Link>
+          ) : (
+            <span className="truncate font-semibold">{b.car ? `${b.car.make} ${b.car.model}` : b.reference}</span>
+          )}
           {showStatus && statusLabel && <Badge tone={b.status === "active" ? "mint" : "majorelle"}>{statusLabel}</Badge>}
         </div>
         <p className="mt-0.5 flex items-center gap-1.5 text-xs text-white/55">
