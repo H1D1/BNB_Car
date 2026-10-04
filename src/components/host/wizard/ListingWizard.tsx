@@ -177,7 +177,7 @@ export function ListingWizard({
                   <span
                     className={cn(
                       "grid size-7 shrink-0 place-items-center rounded-full text-xs",
-                      i === step ? "bg-white text-majorelle-700" : done ? "bg-mint-500/25 text-mint-400" : "bg-white/10",
+                      i === step ? "bg-snow text-majorelle-600" : done ? "bg-mint-500/25 text-mint-400" : "bg-white/10",
                     )}
                   >
                     {done && i !== step ? <Check className="size-4" /> : <Icon className="size-3.5" />}

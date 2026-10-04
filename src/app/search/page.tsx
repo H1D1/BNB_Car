@@ -35,7 +35,7 @@ export default async function SearchPage(props: PageProps<"/search">) {
 
   return (
     <div className="pt-6 pb-10">
-      <div className="mx-auto mb-6 flex max-w-[1600px] justify-center px-3 md:px-6">
+      <div className="relative z-30 mx-auto mb-6 flex max-w-[1600px] justify-center px-3 md:px-6">
         <SearchBar places={places} initial={{ place: filters.place, start: filters.start, end: filters.end, lat: filters.lat, lng: filters.lng, label: filters.label }} compact extraParams={extra} />
       </div>
       <SearchResults cars={cars} places={places} favorites={[...favorites]} loggedIn={!!user} heading={heading}

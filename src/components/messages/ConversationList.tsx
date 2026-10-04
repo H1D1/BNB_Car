@@ -69,7 +69,7 @@ export function ConversationList({ items }: { items: ConversationSummary[] }) {
                         {preview ?? "…"}
                       </span>
                       {c.unread > 0 && (
-                        <span className="grid min-w-5 place-items-center rounded-full bg-terracotta-500 px-1.5 text-[10px] leading-5 font-bold text-white">
+                        <span className="grid min-w-5 place-items-center rounded-full bg-terracotta-500 px-1.5 text-[10px] leading-5 font-bold text-snow">
                           <span className="sr-only">{t("messages.unread")}</span>
                           {c.unread}
                         </span>

@@ -7,7 +7,8 @@ import { MapContainer, Marker, TileLayer, useMap, useMapEvents } from "react-lea
 import { useRouter } from "next/navigation";
 import { formatMAD } from "@/lib/currency";
 import { useI18n } from "@/lib/i18n/client";
-import { MAPBOX_ATTRIBUTION, MAPBOX_TILES } from "@/lib/mapbox";
+import { MAPBOX_ATTRIBUTION, mapboxTiles } from "@/lib/mapbox";
+import { useTheme } from "@/lib/theme";
 
 type Pin = { id: string; lat: number; lng: number; price?: number; label?: string };
 
@@ -62,6 +63,7 @@ export default function CarMap({
 }) {
   const router = useRouter();
   const { locale } = useI18n();
+  const theme = useTheme();
   const stable = useMemo(() => pins, [pins]);
 
   return (
@@ -72,7 +74,7 @@ export default function CarMap({
       className="h-full w-full"
       attributionControl
     >
-      <TileLayer attribution={MAPBOX_ATTRIBUTION} url={MAPBOX_TILES} tileSize={512} zoomOffset={-1} maxZoom={19} />
+      <TileLayer key={theme} attribution={MAPBOX_ATTRIBUTION} url={mapboxTiles(theme)} tileSize={512} zoomOffset={-1} maxZoom={19} />
       {!picker && <FitBounds pins={stable} />}
       {picker && onPick && <ClickToPick onPick={onPick} />}
       {stable.map((p) => (

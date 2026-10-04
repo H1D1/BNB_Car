@@ -6,6 +6,7 @@ import { I18nProvider } from "@/lib/i18n/client";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
 import { LiquidPointer } from "@/components/ui/LiquidPointer";
+import { themeInitScript } from "@/lib/theme-shared";
 
 // Century Gothic is used when installed; Questrial is the closest open geometric fallback.
 const geo = Questrial({ weight: "400", subsets: ["latin"], variable: "--font-geo", display: "swap" });
@@ -19,13 +20,24 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export const viewport: Viewport = { themeColor: "#0a0f2c", width: "device-width", initialScale: 1 };
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f2ec" },
+    { media: "(prefers-color-scheme: dark)", color: "#0a0f2c" },
+  ],
+  width: "device-width",
+  initialScale: 1,
+};
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   const { locale, dir, dict } = await getI18n();
   const currency = await getCurrency();
   return (
-    <html lang={locale} dir={dir} className={`${geo.variable} ${tajawal.variable} antialiased`}>
+    // The theme class is applied by the inline script (and ThemeToggle), never by React.
+    <html lang={locale} dir={dir} className={`${geo.variable} ${tajawal.variable} antialiased`} suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-dvh flex-col">
         <div className="atmosphere" aria-hidden>
           <div className="blob start-[-10%] top-[10%] size-[40vw] bg-majorelle-500/50" />

@@ -260,7 +260,7 @@ export function PhotosStep({
                     type="button"
                     onClick={() => remove(p)}
                     aria-label={t("common.delete")}
-                    className="absolute end-2 top-2 grid size-8 place-items-center rounded-full bg-ink-950/70 text-white/80 backdrop-blur-md transition hover:bg-rose-500 hover:text-white"
+                    className="absolute end-2 top-2 grid size-8 place-items-center rounded-full bg-ink-950/70 text-snow/80 backdrop-blur-md transition hover:bg-rose-500 hover:text-white"
                   >
                     <Trash2 className="size-4" />
                   </button>

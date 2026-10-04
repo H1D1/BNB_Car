@@ -48,6 +48,8 @@ export const ar: Dict = {
     no: "لا",
   },
   nav: {
+    lightMode: "الوضع الفاتح",
+    darkMode: "الوضع الداكن",
     search: "ابحث عن سيارة",
     becomeHost: "اعرض سيارتك",
     trips: "رحلاتي",

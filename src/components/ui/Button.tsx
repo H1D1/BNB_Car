@@ -9,12 +9,12 @@ const base =
 
 const variants: Record<Variant, string> = {
   primary:
-    "text-white bg-gradient-to-br from-majorelle-400 to-majorelle-600 shadow-[0_8px_24px_-6px_rgba(96,80,220,0.7),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_12px_32px_-6px_rgba(96,80,220,0.9),inset_0_1px_0_rgba(255,255,255,0.35)] hover:-translate-y-0.5",
+    "text-snow bg-gradient-to-br from-majorelle-400 to-majorelle-600 shadow-[0_8px_24px_-6px_rgba(96,80,220,0.7),inset_0_1px_0_rgba(255,255,255,0.3)] hover:shadow-[0_12px_32px_-6px_rgba(96,80,220,0.9),inset_0_1px_0_rgba(255,255,255,0.35)] hover:-translate-y-0.5",
   accent:
-    "text-ink-950 bg-gradient-to-br from-saffron-300 to-terracotta-400 shadow-[0_8px_24px_-6px_rgba(226,114,91,0.6),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-6px_rgba(226,114,91,0.8)]",
+    "text-ink-950 bg-gradient-to-br from-saffron-400 to-terracotta-400 shadow-[0_8px_24px_-6px_rgba(226,114,91,0.6),inset_0_1px_0_rgba(255,255,255,0.5)] hover:-translate-y-0.5 hover:shadow-[0_12px_32px_-6px_rgba(226,114,91,0.8)]",
   secondary: "glass text-white hover:bg-white/15 hover:-translate-y-0.5",
   ghost: "text-white/80 hover:text-white hover:bg-white/10",
-  danger: "text-white bg-rose-500/80 hover:bg-rose-500 border border-rose-300/30",
+  danger: "text-snow bg-rose-500/80 hover:bg-rose-500 border border-rose-300/30",
   success: "text-ink-950 bg-mint-400 hover:bg-mint-500",
 };
 

@@ -106,7 +106,7 @@ export function SearchBar({
       </label>
       <button
         type="submit"
-        className="mt-1 flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-saffron-300 to-terracotta-400 px-7 font-bold text-ink-950 shadow-[0_8px_24px_-6px_rgba(226,114,91,0.7)] transition hover:brightness-110 active:scale-[0.98] md:mt-0 md:h-auto md:rounded-full"
+        className="mt-1 flex h-14 items-center justify-center gap-2 rounded-2xl bg-gradient-to-br from-saffron-400 to-terracotta-400 px-7 font-bold text-ink-950 shadow-[0_8px_24px_-6px_rgba(226,114,91,0.7)] transition hover:brightness-110 active:scale-[0.98] md:mt-0 md:h-auto md:rounded-full"
       >
         <Search className="size-5" />
         <span className={cn(compact && "md:sr-only lg:not-sr-only")}>{t("home.searchCta")}</span>

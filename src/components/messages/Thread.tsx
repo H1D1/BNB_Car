@@ -213,7 +213,7 @@ export function Thread({
                     className={cn(
                       "rounded-3xl px-4 py-2.5 text-[15px] leading-relaxed break-words whitespace-pre-wrap",
                       mine
-                        ? "rounded-ee-md bg-gradient-to-br from-majorelle-400 to-majorelle-600 text-white"
+                        ? "rounded-ee-md bg-gradient-to-br from-majorelle-400 to-majorelle-600 text-snow"
                         : "rounded-es-md border border-white/10 bg-white/10 text-white",
                       m.pending && "opacity-70",
                       m.failed && "border border-rose-400/60",
@@ -292,7 +292,7 @@ export function Thread({
             type="submit"
             disabled={!draft.trim()}
             aria-label={t("common.send")}
-            className="grid size-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-majorelle-400 to-majorelle-600 text-white transition hover:-translate-y-0.5 disabled:opacity-40"
+            className="grid size-11 shrink-0 place-items-center rounded-full bg-gradient-to-br from-majorelle-400 to-majorelle-600 text-snow transition hover:-translate-y-0.5 disabled:opacity-40"
           >
             <SendHorizontal className="size-5 rtl:rotate-180" />
           </button>

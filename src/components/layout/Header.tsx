@@ -57,7 +57,7 @@ export async function Header() {
             >
               {l.label}
               {!!l.badge && (
-                <span className="absolute -top-0.5 end-1 grid min-w-4.5 place-items-center rounded-full bg-terracotta-500 px-1 text-[10px] leading-4.5 text-white">
+                <span className="absolute -top-0.5 end-1 grid min-w-4.5 place-items-center rounded-full bg-terracotta-500 px-1 text-[10px] leading-4.5 text-snow">
                   {l.badge}
                 </span>
               )}

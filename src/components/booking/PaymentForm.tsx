@@ -57,7 +57,7 @@ export function PaymentForm({
 
   return (
     <Glass strong className="w-full max-w-md overflow-hidden animate-fade-up">
-      <div className={method === "cmi" ? "bg-gradient-to-br from-[#0b5a9c] to-[#083c6b] p-6" : "bg-gradient-to-br from-majorelle-500 to-majorelle-600 p-6"}>
+      <div className={method === "cmi" ? "bg-gradient-to-br from-[#0b5a9c] to-[#083c6b] p-6 text-snow" : "bg-gradient-to-br from-majorelle-500 to-majorelle-600 p-6 text-snow"}>
         <div className="flex items-center gap-3">
           <span className="grid size-11 place-items-center rounded-xl bg-white/15">
             <Landmark className="size-6" />

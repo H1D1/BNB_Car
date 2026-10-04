@@ -56,20 +56,20 @@ export function CarCard({
           <div className="absolute inset-0 bg-gradient-to-t from-ink-950/70 via-transparent to-transparent" />
           <div className="absolute start-3 top-3 flex gap-1.5">
             {car.instant_book && (
-              <Badge tone="saffron" className="backdrop-blur-md">
+              <Badge tone="saffron" className="border-saffron-300/40 bg-ink-950/55 !text-saffron-300 backdrop-blur-md">
                 <Zap className="size-3" />
                 {t("car.instant")}
               </Badge>
             )}
             {car.airport_slugs.length > 0 && (
-              <Badge tone="neutral" className="bg-ink-950/50 backdrop-blur-md">
+              <Badge tone="neutral" className="border-snow/20 bg-ink-950/55 !text-snow backdrop-blur-md">
                 <Plane className="size-3" />
                 {car.airport_slugs.map((a) => a.toUpperCase()).join(" · ")}
               </Badge>
             )}
           </div>
           <div className="absolute bottom-3 start-3 end-3 flex items-end justify-between">
-            <span className="flex items-center gap-1 text-xs font-semibold text-white/85">
+            <span className="flex items-center gap-1 text-xs font-semibold text-snow/90">
               <MapPin className="size-3.5" />
               {[car.neighborhood, placeLabel].filter(Boolean).join(", ")}
             </span>

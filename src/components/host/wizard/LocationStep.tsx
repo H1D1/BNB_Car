@@ -62,7 +62,7 @@ export function LocationStep({ v, set, invalid, places }: StepProps & { places: 
         />
         <div className="relative h-80 overflow-hidden rounded-2xl border border-white/10 md:h-96">
           <CarMapLazy key={mapKey} picker pins={[{ id: "pin", lat: v.lat, lng: v.lng }]} onPick={(lat, lng) => pick(lat, lng)} zoom={14} />
-          <p className="pointer-events-none absolute inset-x-3 bottom-3 z-[500] flex items-center gap-2 rounded-xl bg-ink-950/75 px-3 py-2 text-xs text-white/80 backdrop-blur-md">
+          <p className="pointer-events-none absolute inset-x-3 bottom-3 z-[500] flex items-center gap-2 rounded-xl bg-ink-950/75 px-3 py-2 text-xs text-snow/85 backdrop-blur-md">
             {resolving ? <Loader2 className="size-3.5 animate-spin" /> : <MapPin className="size-3.5 text-saffron-300" />}
             {t("wizard.mapHint")}
           </p>

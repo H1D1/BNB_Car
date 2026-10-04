@@ -198,13 +198,13 @@ export function FilterPanel({ className, mode }: { className?: string; mode: "si
       <Button variant="secondary" size="sm" className="lg:hidden" onClick={() => setOpen(true)}>
         <SlidersHorizontal className="size-4" />
         {t("search.filters")}
-        {activeCount > 0 && <span className="rounded-full bg-terracotta-500 px-1.5 text-xs">{activeCount}</span>}
+        {activeCount > 0 && <span className="rounded-full bg-terracotta-500 px-1.5 text-xs text-snow">{activeCount}</span>}
       </Button>
       <div className={cn("fixed inset-0 z-50 lg:hidden", open ? "visible" : "invisible")}>
         <div className={cn("absolute inset-0 bg-ink-950/70 transition-opacity", open ? "opacity-100" : "opacity-0")} onClick={() => setOpen(false)} />
         <div
           className={cn(
-            "glass-strong absolute inset-x-2 bottom-2 max-h-[85dvh] overflow-y-auto rounded-3xl p-5 transition-transform duration-500 ease-[var(--ease-liquid)]",
+            "glass-menu absolute inset-x-2 bottom-2 max-h-[85dvh] overflow-y-auto rounded-3xl p-5 transition-transform duration-500 ease-[var(--ease-liquid)]",
             open ? "translate-y-0" : "translate-y-[110%]",
           )}
         >

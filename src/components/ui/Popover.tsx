@@ -50,7 +50,7 @@ export function Popover({
         role="menu"
         onClick={(e) => (e.target as HTMLElement).closest("a") && close()}
         className={cn(
-          "glass-strong absolute top-full z-50 mt-2 min-w-56 origin-top rounded-2xl p-2 transition-all duration-300 ease-[var(--ease-liquid)]",
+          "glass-menu absolute top-full z-50 mt-2 min-w-56 origin-top rounded-2xl p-2 transition-all duration-300 ease-[var(--ease-liquid)]",
           align === "end" ? "end-0" : "start-0",
           open ? "visible scale-100 opacity-100" : "invisible scale-95 opacity-0",
           className,

@@ -67,7 +67,7 @@ export function Avatar({ name, url, size = 40, className }: { name: string; url?
   return (
     <span
       className={cn(
-        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-terracotta-400 to-majorelle-500 font-bold text-white ring-2 ring-white/20",
+        "relative inline-flex shrink-0 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-terracotta-400 to-majorelle-500 font-bold text-snow ring-2 ring-white/20",
         className,
       )}
       style={{ width: size, height: size, fontSize: size * 0.38 }}

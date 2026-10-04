@@ -192,7 +192,7 @@ export function LocationInput({
         <div
           id={listId}
           role="listbox"
-          className="glass-strong absolute inset-x-0 top-full z-50 mt-2 max-h-96 min-w-72 overflow-y-auto rounded-2xl p-1.5"
+          className="glass-menu absolute inset-x-0 top-full z-50 mt-2 max-h-96 min-w-72 overflow-y-auto rounded-2xl p-1.5"
         >
           {showMyLocation && (
             <button

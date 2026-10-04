@@ -48,6 +48,8 @@ export const fr: Dict = {
     no: "Non",
   },
   nav: {
+    lightMode: "Mode clair",
+    darkMode: "Mode sombre",
     search: "Trouver une voiture",
     becomeHost: "Louer ma voiture",
     trips: "Voyages",

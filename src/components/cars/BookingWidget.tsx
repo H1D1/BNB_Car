@@ -156,7 +156,7 @@ export function BookingWidget({
               key={v}
               type="button"
               onClick={() => switchType(v)}
-              className={cn("rounded-full py-2 transition", type === v ? "bg-white text-ink-900" : "text-white/70")}
+              className={cn("rounded-full py-2 transition", type === v ? "bg-snow text-ink-900 shadow" : "text-white/70")}
             >
               {t(`booking.${v}`)}
             </button>

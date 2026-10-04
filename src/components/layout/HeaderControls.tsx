@@ -26,6 +26,7 @@ import { cn } from "@/lib/utils";
 import { Avatar } from "../ui/primitives";
 import { MenuItem, Popover } from "../ui/Popover";
 import { ButtonLink } from "../ui/Button";
+import { ThemeToggle } from "./ThemeToggle";
 import type { UserMode } from "@/lib/types";
 
 type MiniProfile = { id: string; full_name: string; avatar_url: string | null; active_mode: UserMode; is_host: boolean };
@@ -54,7 +55,7 @@ export function HeaderControls({
               onClick={() => start(() => setLocale(l))}
               className={cn(
                 "rounded-xl px-2 py-2 text-sm font-semibold transition",
-                l === locale ? "bg-majorelle-500 text-white" : "text-white/70 hover:bg-white/10",
+                l === locale ? "bg-majorelle-500 text-snow" : "text-white/70 hover:bg-white/10",
               )}
             >
               {LOCALE_LABELS[l]}
@@ -71,7 +72,7 @@ export function HeaderControls({
               onClick={() => start(() => setCurrency(c))}
               className={cn(
                 "rounded-xl px-2 py-2 text-sm font-semibold transition",
-                c === currency ? "bg-terracotta-500 text-white" : "text-white/70 hover:bg-white/10",
+                c === currency ? "bg-terracotta-500 text-snow" : "text-white/70 hover:bg-white/10",
               )}
             >
               {c}
@@ -91,7 +92,7 @@ export function HeaderControls({
           onClick={() => m !== profile.active_mode && start(() => setMode(m))}
           className={cn(
             "rounded-full px-3.5 py-1.5 transition-all duration-300",
-            profile.active_mode === m ? "bg-white text-ink-900 shadow" : "text-white/70 hover:text-white",
+            profile.active_mode === m ? "bg-snow text-ink-900 shadow" : "text-white/70 hover:text-white",
           )}
         >
           {m === "renter" ? t("nav.renterMode") : t("nav.hostMode")}
@@ -122,6 +123,8 @@ export function HeaderControls({
   return (
     <>
       <div className="hidden md:block">{modeSwitch}</div>
+
+      <ThemeToggle />
 
       <Popover
         label={t("nav.language")}
@@ -157,7 +160,7 @@ export function HeaderControls({
                 <Icon className="size-4 text-white/50" />
                 {label}
                 {href === "/messages" && counts.unread > 0 && (
-                  <span className="ms-auto rounded-full bg-terracotta-500 px-1.5 text-[11px]">{counts.unread}</span>
+                  <span className="ms-auto rounded-full bg-terracotta-500 px-1.5 text-[11px] text-snow">{counts.unread}</span>
                 )}
               </Link>
             ))}
@@ -201,7 +204,7 @@ export function HeaderControls({
         />
         <div
           className={cn(
-            "glass-strong absolute inset-y-3 end-3 flex w-[min(88vw,22rem)] flex-col gap-2 overflow-y-auto rounded-3xl p-4 transition-transform duration-500 ease-[var(--ease-liquid)]",
+            "glass-menu absolute inset-y-3 end-3 flex w-[min(88vw,22rem)] flex-col gap-2 overflow-y-auto rounded-3xl p-4 transition-transform duration-500 ease-[var(--ease-liquid)]",
             mobileOpen ? "translate-x-0" : "translate-x-[110%] rtl:-translate-x-[110%]",
           )}
         >
@@ -225,7 +228,7 @@ export function HeaderControls({
                 {l.href === "/search" && <Search className="size-4 text-white/50" />}
                 {l.label}
               </span>
-              {!!l.badge && <span className="rounded-full bg-terracotta-500 px-2 text-xs">{l.badge}</span>}
+              {!!l.badge && <span className="rounded-full bg-terracotta-500 px-2 text-xs text-snow">{l.badge}</span>}
             </Link>
           ))}
           {accountLinks

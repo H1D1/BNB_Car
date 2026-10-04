@@ -46,6 +46,8 @@ export const en = {
     no: "No",
   },
   nav: {
+    lightMode: "Light mode",
+    darkMode: "Dark mode",
     search: "Find a car",
     becomeHost: "List your car",
     trips: "Trips",

@@ -68,7 +68,7 @@ export default async function Home() {
           </h1>
           <p className="mx-auto mt-6 max-w-2xl text-lg text-white/65">{t("home.subtitle")}</p>
         </div>
-        <div className="mt-10 flex justify-center [animation-delay:150ms] animate-fade-up">
+        <div className="relative z-30 mt-10 flex justify-center [animation-delay:150ms] animate-fade-up">
           <SearchBar places={places} />
         </div>
         <div className="mx-auto mt-10 grid max-w-3xl grid-cols-3 gap-3 text-center">
@@ -113,8 +113,8 @@ export default async function Home() {
               )}
               <div className="absolute inset-0 bg-gradient-to-t from-ink-950/90 via-ink-950/20 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-4">
-                <p className="text-lg font-bold">{placeName(c, locale)}</p>
-                <p className="text-xs text-white/65">
+                <p className="text-lg font-bold text-snow">{placeName(c, locale)}</p>
+                <p className="text-xs text-snow/70">
                   {stats.perCity[c.slug] ?? 0} {t("home.statCars")}
                 </p>
               </div>
@@ -188,7 +188,7 @@ export default async function Home() {
           ].map((s, i) => (
             <Glass key={s.title} liquid className="relative p-7">
               <span className="absolute end-6 top-5 text-5xl font-bold text-white/5">{i + 1}</span>
-              <span className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-majorelle-400 to-majorelle-600">
+              <span className="grid size-12 place-items-center rounded-2xl bg-gradient-to-br from-majorelle-400 to-majorelle-600 text-snow">
                 <s.icon className="size-6" />
               </span>
               <h3 className="mt-5 text-lg font-bold">{s.title}</h3>
@@ -219,13 +219,13 @@ export default async function Home() {
 
       {/* Host CTA */}
       <section className="mx-auto mt-20 max-w-7xl px-4 md:px-6">
-        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-terracotta-500 via-terracotta-600 to-majorelle-600 p-8 md:p-14">
+        <div className="relative overflow-hidden rounded-[2rem] bg-gradient-to-br from-terracotta-500 via-terracotta-600 to-majorelle-600 p-8 text-snow md:p-14">
           <div className="absolute -end-10 -top-10 size-72 rounded-full bg-saffron-400/30 blur-3xl" />
           <div className="relative max-w-2xl">
             <CarFront className="size-10" />
             <h2 className="mt-4 text-3xl font-bold md:text-4xl">{t("home.hostTitle", { amount: formatMAD(6000, locale) })}</h2>
-            <p className="mt-3 text-white/85">{t("home.hostText")}</p>
-            <ButtonLink href="/host/cars/new" variant="secondary" size="lg" className="mt-8 bg-white/20">
+            <p className="mt-3 text-snow/85">{t("home.hostText")}</p>
+            <ButtonLink href="/host/cars/new" variant="secondary" size="lg" className="mt-8 !border-snow/30 !bg-snow/20 !text-snow">
               {t("home.hostCta")}
               <ArrowRight className="size-4 rtl:rotate-180" />
             </ButtonLink>
