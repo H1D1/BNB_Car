@@ -10,12 +10,12 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function Page(props: PageProps<"/login">) {
-  const { next } = await props.searchParams;
+  const { next, error } = await props.searchParams;
   const nextPath = typeof next === "string" ? next : undefined;
   if (await getUser()) redirect(nextPath ?? "/");
   return (
     <div className="flex min-h-[70dvh] items-center justify-center px-4 py-12">
-      <AuthForm mode="login" next={nextPath} />
+      <AuthForm mode="login" next={nextPath} oauthError={typeof error === "string" ? error : undefined} />
     </div>
   );
 }

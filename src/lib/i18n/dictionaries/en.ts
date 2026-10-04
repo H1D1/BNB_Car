@@ -366,6 +366,10 @@ export const en = {
     depositHold: "A deposit of {amount} will be held (not charged) and released after the return inspection.",
   },
   auth: {
+    google: "Continue with Google",
+    orEmail: "or with email",
+    googleDisabled: "Google sign-in isn’t enabled yet on this project.",
+    oauthError: "Sign-in with Google failed. Please try again.",
     loginTitle: "Welcome back",
     loginSubtitle: "Log in to manage your trips and cars.",
     signupTitle: "Create your account",

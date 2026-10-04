@@ -7,8 +7,9 @@ import { login, signup } from "@/app/actions/auth";
 import type { TKey } from "@/lib/i18n/config";
 import { Alert, Field, Glass } from "../ui/primitives";
 import { SubmitButton } from "../ui/SubmitButton";
+import { GoogleButton } from "./GoogleButton";
 
-export function AuthForm({ mode, next }: { mode: "login" | "signup"; next?: string }) {
+export function AuthForm({ mode, next, oauthError }: { mode: "login" | "signup"; next?: string; oauthError?: string }) {
   const { t } = useI18n();
   const [state, action] = useActionState(mode === "login" ? login : signup, null);
   const q = next ? `?next=${encodeURIComponent(next)}` : "";
@@ -18,7 +19,21 @@ export function AuthForm({ mode, next }: { mode: "login" | "signup"; next?: stri
       <h1 className="text-2xl font-bold">{mode === "login" ? t("auth.loginTitle") : t("auth.signupTitle")}</h1>
       <p className="mt-1 text-sm text-white/60">{mode === "login" ? t("auth.loginSubtitle") : t("auth.signupSubtitle")}</p>
 
-      <form action={action} className="mt-7 space-y-4">
+      <div className="mt-7">
+        <GoogleButton next={next} />
+        {oauthError && (
+          <Alert tone="error" className="mt-3">
+            {t("auth.oauthError")}
+          </Alert>
+        )}
+      </div>
+      <div className="my-6 flex items-center gap-3 text-xs font-semibold tracking-wider text-white/40 uppercase">
+        <span className="h-px flex-1 bg-white/15" />
+        {t("auth.orEmail")}
+        <span className="h-px flex-1 bg-white/15" />
+      </div>
+
+      <form action={action} className="space-y-4">
         <input type="hidden" name="next" value={next ?? ""} />
         {mode === "signup" && (
           <Field label={t("auth.fullName")} htmlFor="full_name">

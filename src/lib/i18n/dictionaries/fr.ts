@@ -368,6 +368,10 @@ export const fr: Dict = {
     depositHold: "Une caution de {amount} sera bloquée (non débitée) puis libérée après l’état des lieux de retour.",
   },
   auth: {
+    google: "Continuer avec Google",
+    orEmail: "ou avec votre e-mail",
+    googleDisabled: "La connexion Google n’est pas encore activée sur ce projet.",
+    oauthError: "La connexion avec Google a échoué. Veuillez réessayer.",
     loginTitle: "Bon retour parmi nous",
     loginSubtitle: "Connectez-vous pour gérer vos locations et vos voitures.",
     signupTitle: "Créez votre compte",

@@ -368,6 +368,10 @@ export const ar: Dict = {
     depositHold: "سيُحجز مبلغ ضمان قدره {amount} (دون خصمه) ويُحرَّر بعد معاينة الإرجاع.",
   },
   auth: {
+    google: "المتابعة باستخدام Google",
+    orEmail: "أو عبر البريد الإلكتروني",
+    googleDisabled: "تسجيل الدخول عبر Google غير مفعّل بعد في هذا المشروع.",
+    oauthError: "تعذّر تسجيل الدخول عبر Google. المرجو المحاولة مرة أخرى.",
     loginTitle: "مرحبًا بعودتك",
     loginSubtitle: "سجّل الدخول لإدارة رحلاتك وسياراتك.",
     signupTitle: "أنشئ حسابك",
