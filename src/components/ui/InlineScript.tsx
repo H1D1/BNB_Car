@@ -1,3 +1,5 @@
+"use client";
+
 /**
  * Inline <script> that runs during HTML parsing (before first paint). On the client React
  * renders it as text/plain so it never re-executes or warns; suppressHydrationWarning

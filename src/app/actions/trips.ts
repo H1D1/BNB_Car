@@ -12,7 +12,8 @@ type TripAction = (typeof ACTIONS)[number];
 
 const revalidateTrip = (id: string) => {
   revalidatePath(`/trips/${id}`);
-  revalidatePath("/trips");
+  // layout too: header badges (pending requests) depend on booking status
+  revalidatePath("/", "layout");
 };
 
 export async function transitionBooking(_: ActionState, form: FormData): Promise<ActionState> {

@@ -414,9 +414,9 @@ export async function respondToRequest(bookingId: string, action: "accept" | "de
   const supabase = await createClient();
   const { error } = await supabase.rpc("transition_booking", { p_booking_id: bookingId, p_action: action });
   if (error) return { error: errorCode(error.message) };
-  revalidatePath("/host");
   revalidatePath(`/trips/${bookingId}`);
-  revalidatePath("/trips");
+  // layout too: the header shows the pending-requests badge
+  revalidatePath("/", "layout");
   return { ok: true };
 }
 
