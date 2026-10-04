@@ -6,7 +6,7 @@ import { Plane } from "lucide-react";
 import { useI18n } from "@/lib/i18n/client";
 import { formatMAD } from "@/lib/currency";
 import { useInView, useMediaQuery } from "@/lib/motion";
-import { TZ } from "@/lib/utils";
+import { isoToCasablancaLocal } from "@/lib/utils";
 
 export type BoardRow = { slug: string; iata: string; name: string; city: string; count: number; from: number | null };
 
@@ -33,7 +33,7 @@ function Flap({ text, width, rtl, tone = "amber" }: { text: string; width: numbe
 }
 
 function useCasablancaClock(active: boolean) {
-  const fmt = () => new Intl.DateTimeFormat("en-GB", { timeZone: TZ, hour: "2-digit", minute: "2-digit" }).format(new Date());
+  const fmt = () => isoToCasablancaLocal(new Date()).slice(11, 16);
   const [now, setNow] = useState(fmt);
   useEffect(() => {
     if (!active) return;
